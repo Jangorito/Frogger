@@ -21,15 +21,15 @@ public class MyStage extends World{
 //			@Override
 //			public void run() {
 //				mediaPlayer.seek(Duration.ZERO);
-//				
+//
 //			}
-//			
+//
 //		});
 //		mediaPlayer.play();
 	}
 	
 	public void playMusic() {
-		String musicFile = "src/p4_group_8_repo/Frogger Main Song Theme (loop).mp3";   
+		String musicFile = "src/main/resources/Media/Frogger Main Song Theme (loop).mp3";
 		Media sound = new Media(new File(musicFile).toURI().toString());
 		mediaPlayer = new MediaPlayer(sound);
 		mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
