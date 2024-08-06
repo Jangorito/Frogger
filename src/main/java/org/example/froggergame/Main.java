@@ -37,9 +37,7 @@ public class Main extends Application {
 		//Obstacle obstacle1 = new Obstacle("file:src/main/resources/images/truck2Right.png", 100, 100,2 );
 		//Obstacle obstacle2 = new Obstacle("file:src/main/resources/images/truck1Right.png",0,  150, 1);
 
-		BackgroundImage froggerBack = new BackgroundImage("file:src/main/resources/images/frog background.png");
-		froggerBack.setX(0);
-		froggerBack.setY(200);
+		BackgroundImage froggerBack = new BackgroundImage("file:src/main/resources/images/Frogger Background V1.png");
 		background.add(froggerBack);
 		
 		background.add(new Log("file:src/main/resources/images/log3.png", 150, 0, 166, 0.75));
