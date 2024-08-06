@@ -6,7 +6,6 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
-
 public class Animal extends Actor {
 	Image imgW1;
 	Image imgA1;
@@ -31,15 +30,14 @@ public class Animal extends Actor {
 	boolean stop = false; // game is won
 	boolean changeScore = false; // if the score has changed
 	int carD = 0; // counter for death animation
-	double w = 800; // max height reached by frogger
+	double w = 800; // max height reached by Frogger
 	ArrayList<End> inter = new ArrayList<End>();
 
 
 	public Animal(String imageLink) {
 		// setting frog image and position
 		setImage(new Image(imageLink, imgSize, imgSize, true, true));
-		setX(300);
-		setY(679.8+movement);
+		resetPosition();
 
 		// setting all the images of the frogger when you press wasd
 		imgW1 = new Image("file:src/main/resources/images/froggerUp.png", imgSize, imgSize, true, true);
