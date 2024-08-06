@@ -36,11 +36,6 @@ public abstract class Actor extends ImageView{
         return someArray;
         // returns an array that represents two items that have collided
     }
-    
-//    public void manageInput(KeyEvent event) {
-//        // TODO: Need to override in Animal class to handle Frogger input
-//        // TODO: multiplayer?
-//    }
 
     public <A extends Actor> A getOneIntersectingObject(java.lang.Class<A> cls) {
         ArrayList<A> someArray = new ArrayList<A>();
@@ -53,7 +48,6 @@ public abstract class Actor extends ImageView{
         return someArray.getFirst();
     } // TODO: find out when you would need to access the item that has collided, perhaps with the animals and cars?
 
-//    public abstract void manageInput(KeyEvent event);
 
     public abstract void act(long now);
 
