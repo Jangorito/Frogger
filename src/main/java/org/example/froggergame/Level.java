@@ -40,10 +40,9 @@ public class Level {
         double car2Speed = -5;
 
         setSpeeds(difficulty);
-        
-
+        setEndCond(1);
         // Add background image
-        BackgroundImage froggerBack = new BackgroundImage("file:src/main/resources/images/Frogger Background V1.png");
+        BackgroundImage froggerBack = new BackgroundImage("file:src/main/resources/images/Frogger Background V7.png");
         background.add(froggerBack);
 
 
@@ -97,6 +96,12 @@ public class Level {
         } 
         if (lvl == 3){
             this.multiplier = 1.5;
+        }
+    }
+
+    public void setEndCond(int mode){
+        if (mode == 1) {
+            animal.setCtfEnd(true);
         }
     }
 }

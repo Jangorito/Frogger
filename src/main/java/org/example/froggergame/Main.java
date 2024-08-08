@@ -35,7 +35,7 @@ public class Main extends Application {
 
 		animal = new Animal("file:src/main/resources/images/froggerUp.png");
 		Level level1 = new Level(background, animal);
-		level1.setupLevel(1, 3);
+		level1.setupLevel(1, 1);
 
 		background.start();
 		primaryStage.setScene(scene);

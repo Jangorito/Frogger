@@ -6,6 +6,8 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
+// TODO: Split class into Animal and something else that contains rules for game.
+//  Adversely, add it into Level.Java? Particularly Game End
 public class Animal extends Actor {
 	Image imgW1;
 	Image imgA1;
@@ -31,6 +33,8 @@ public class Animal extends Actor {
 	boolean changeScore = false; // if the score has changed
 	int carD = 0; // counter for death animation
 	double w = 800; // max height reached by Frogger
+	boolean ctfEnd = false; // whether the ends are capture the flag ends
+	boolean snagged = false;
 	ArrayList<End> inter = new ArrayList<End>();
 
 
@@ -142,7 +146,7 @@ public class Animal extends Actor {
 	@Override
 	public void act(long now) {
 		checkBoundaries();
-		handleCollisions(now);
+		// handleCollisions(now);
 		checkInteractions();
 		checkGameOver();
 	}
@@ -159,7 +163,7 @@ public class Animal extends Actor {
 		}
 	}
 
-	private void handleCollisions(long now) {								// TODO: are there any more collisions to add?
+	private void handleCollisions(long now) {								// -TODO: are there any more collisions to add?-
 		if (getIntersectingObjects(Obstacle.class).size() >= 1) {
 			carDeath = true;
 		}
@@ -244,7 +248,12 @@ public class Animal extends Actor {
 		} else if (getIntersectingObjects(WetTurtle.class).size() >= 1) {
 			handleWetTurtleInteraction();
 		} else if (getIntersectingObjects(End.class).size() >= 1) {
-			handleEndInteraction();
+			if (!ctfEnd) {
+				handleEndInteraction();
+			}
+			else{
+				handleCtfEndInteraction();
+			}
 		} else if (getY() < 413) {
 			waterDeath = true;
 		}
@@ -272,7 +281,7 @@ public class Animal extends Actor {
 		}
 	}
 
-	private void handleEndInteraction() {
+	private void handleEndInteraction() { //
 		End endPoint = getIntersectingObjects(End.class).get(0);
 		if (endPoint.isActivated()) {
 			end--;
@@ -286,6 +295,18 @@ public class Animal extends Actor {
 		resetPosition();
 	}
 
+	private void handleCtfEndInteraction() { // TODO:
+		End endPoint = getIntersectingObjects(End.class).get(0);
+		if (endPoint.isCtfActive()) {
+			snagged = true;
+			points += 70;
+		}
+		else{
+			points -= 50;
+			resetPosition();
+		}
+		changeScore();
+	}
 	private void checkGameOver() {
 		if (end == 5) {
 			stop = true;
@@ -297,6 +318,9 @@ public class Animal extends Actor {
 		setY(679.8 + movement);
 	}
 
+	public void setCtfEnd(boolean ctfEnd) {
+		this.ctfEnd = ctfEnd;
+	}
 
 	public boolean getStop() {
 		return end==5;

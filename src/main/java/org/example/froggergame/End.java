@@ -4,9 +4,11 @@ import javafx.scene.image.Image;
 
 public class End extends Actor{
 	boolean activated = false;
+	boolean ctfActive = false;
 	@Override
 	public void act(long now) {
-		// TODO Auto-generated method st
+		// TODO animation that shows it's a CTF End?
+
 	}
 	
 	public End(int x, int y) {
@@ -23,6 +25,7 @@ public class End extends Actor{
 	public boolean isActivated() {
 		return activated;
 	}
+	public boolean isCtfActive() { return ctfActive; }
 	
 
 }
