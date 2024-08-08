@@ -32,7 +32,9 @@ public class Main extends Application {
 	public void start(Stage primaryStage) throws Exception {
 	    background = new MyStage();
 	    Scene scene  = new Scene(background,600,800);
-	    
+
+		animal = new Animal("file:src/main/resources/images/froggerUp.png");
+
 		//Obstacle obstacle = new Obstacle("file:src/main/resources/images/truck1Right.png", 25, 25, 3);
 		//Obstacle obstacle1 = new Obstacle("file:src/main/resources/images/truck2Right.png", 100, 100,2 );
 		//Obstacle obstacle2 = new Obstacle("file:src/main/resources/images/truck1Right.png",0,  150, 1);
@@ -82,7 +84,6 @@ public class Main extends Application {
 		background.add(new End(141 + 141-13,96));
 		background.add(new End(141 + 141-13+141-13+1,96));
 		background.add(new End(141 + 141-13+141-13+141-13+3,96));
-		animal = new Animal("file:src/main/resources/images/froggerUp.png");
 		background.add(animal);
 		background.add(new Obstacle("file:src/main/resources/images/truck1"+"Right.png",
 				0, 649, 1, 120, 120));
