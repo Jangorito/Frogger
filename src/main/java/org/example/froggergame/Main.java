@@ -27,7 +27,7 @@ public class Main extends Application {
 	// stage = window
 	// scene = contents
 
-	// TODO: recreate start method in a modular way + find/design better background image + implement GUI + levels
+	// TODO: recreate start method in a modular way + --find/design better background image-- + implement GUI + levels
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 	    background = new MyStage();
@@ -39,7 +39,7 @@ public class Main extends Application {
 
 		BackgroundImage froggerBack = new BackgroundImage("file:src/main/resources/images/Frogger Background V1.png");
 		background.add(froggerBack);
-		
+
 		background.add(new Log("file:src/main/resources/images/log3.png", 150, 0, 166, 0.75));
 		background.add(new Log("file:src/main/resources/images/log3.png", 150, 220, 166, 0.75));
 		background.add(new Log("file:src/main/resources/images/log3.png", 150, 440, 166, 0.75));
@@ -123,7 +123,7 @@ public class Main extends Application {
             	}
             	if (animal.getStop()) {
             		System.out.print("STOPP:");
-            		background.stopMusic();
+            		// background.stopMusic();
             		stop();
             		background.stop();
             		Alert alert = new Alert(AlertType.INFORMATION);

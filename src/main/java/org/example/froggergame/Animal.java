@@ -24,7 +24,7 @@ public class Animal extends Actor {
 
 	// game control states:
 	private boolean second = false; // if frog is moving / is in midair
-	boolean noMove = false; // stops 
+	boolean noMove = false; // when frogger can't move
 	int imgSize = 40;
 	boolean carDeath = false, waterDeath = false; // death states
 	boolean stop = false; // game is won
