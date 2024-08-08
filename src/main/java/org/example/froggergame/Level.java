@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class Level {
     private MyStage background;
     private Animal animal;
+    public End[] ends;
     // private double log1Speed = 0.75;
     // private double log2Speed = -2; // TODO: make sure multiplier still works with minuses
     // private double turtleSpeed = -1;
@@ -15,6 +16,7 @@ public class Level {
         this.background = background;
         this.animal = animal;
         this.multiplier = 1;
+//        this.ends = new End[0];
     }
 
     // 3 sets of logs; y: 166, 276, 329; s: .75, -2
@@ -41,6 +43,7 @@ public class Level {
 
         setSpeeds(difficulty);
         setEndCond(1);
+
         // Add background image
         BackgroundImage froggerBack = new BackgroundImage("file:src/main/resources/images/Frogger Background V7.png");
         background.add(froggerBack);
@@ -65,11 +68,12 @@ public class Level {
         background.add(new WetTurtle(200, 217, turtleSpeed*multiplier, 130, 130));
 
         // Add ends
-        background.add(new End(13, 96));
-        background.add(new End(141, 96));
-        background.add(new End(141 + 141 - 13, 96));
-        background.add(new End(141 + 141 - 13 + 141 - 13 + 1, 96));
-        background.add(new End(141 + 141 - 13 + 141 - 13 + 141 - 13 + 3, 96));
+        initializeEnds(5, 60, 600);
+//        background.add(new End(13, 96)); // 13
+//        background.add(new End(141, 96)); // 141
+//        background.add(new End(141 + 141 - 13, 96)); // 269
+//        background.add(new End(141 + 141 - 13 + 141 - 13 + 1, 96)); // 398
+//        background.add(new End(141 + 141 - 13 + 141 - 13 + 141 - 13 + 3, 96)); // 528
 
         // Add animal
         background.add(animal);
@@ -104,4 +108,18 @@ public class Level {
             animal.setCtfEnd(true);
         }
     }
+
+    public void initializeEnds(int numberOfEnds, int endWidth, int windowWidth) {
+        this.ends = new End[numberOfEnds];  // Array to hold the End objects
+        int remainingSpace = windowWidth - (numberOfEnds * endWidth);
+        int gap = remainingSpace / (numberOfEnds + 1);
+
+        for (int i = 0; i < numberOfEnds; i++) {
+            int xPosition = gap + i * (endWidth + gap);
+            this.ends[i] = new End(xPosition, 96);  // Initialize and store in the array
+            background.add(this.ends[i]);  // Add each End to the background
+        }
+
+    }
+
 }

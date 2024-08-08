@@ -194,8 +194,7 @@ public class Animal extends Actor {
 				setImage(new Image("file:src/main/resources/images/waterdeath4.png", imgSize,imgSize , true, true));
 			}
 			if (carD == 5) {
-				setX(300);
-				setY(679.8+movement);
+				resetPosition();
 				waterDeath = false;
 				carD = 0;
 				setImage(new Image("file:src/main/resources/images/froggerUp.png", imgSize, imgSize, true, true));
@@ -225,8 +224,7 @@ public class Animal extends Actor {
 				setImage(new Image("file:src/main/resources/images/cardeath3.png", imgSize, imgSize, true, true));
 			}
 			if (carD == 4) {
-				setX(300);
-				setY(679.8+movement);
+				resetPosition();
 				carDeath = false;
 				carD = 0;
 				setImage(new Image("file:src/main/resources/images/froggerUp.png", imgSize, imgSize, true, true));
@@ -314,7 +312,7 @@ public class Animal extends Actor {
 	}
 
 	private void resetPosition() {
-		setX(300);
+		setX(280);
 		setY(679.8 + movement);
 	}
 
