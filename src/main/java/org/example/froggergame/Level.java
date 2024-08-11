@@ -1,21 +1,27 @@
 package org.example.froggergame;
 
-import java.util.ArrayList;
+import javafx.scene.image.Image;
 
+import java.util.ArrayList;
+import java.util.Random;
 public class Level {
     private MyStage background;
     private Animal animal;
     public End[] ends;
+    int ctfEndNo;
     // private double log1Speed = 0.75;
     // private double log2Speed = -2; // TODO: make sure multiplier still works with minuses
     // private double turtleSpeed = -1;
     // private double vehicleSpeed = 1;
     // private double car2Speed = -5;
     private double multiplier;
+    private Random random;
+
     public Level(MyStage background, Animal animal) {
         this.background = background;
         this.animal = animal;
         this.multiplier = 1;
+        this.random = new Random();
 //        this.ends = new End[0];
     }
 
@@ -35,14 +41,16 @@ public class Level {
     // 1 TRUCK
 
     public void setupLevel(int mode, int difficulty) {
+        // setting default speeds
         double log1Speed = 0.75;
         double log2Speed = -2; //
         double turtleSpeed = -1;
         double vehicleSpeed = 1;
         double car2Speed = -5;
 
+        // setting speed and end based on difficulty and game mode
         setSpeeds(difficulty);
-        setEndCond(1);
+        setEndCond(mode);
 
         // Add background image
         BackgroundImage froggerBack = new BackgroundImage("file:src/main/resources/images/Frogger Background V7.png");
@@ -67,8 +75,9 @@ public class Level {
         background.add(new WetTurtle(400, 217, turtleSpeed*multiplier, 130, 130));
         background.add(new WetTurtle(200, 217, turtleSpeed*multiplier, 130, 130));
 
-        // Add ends
+        // ends setup
         initializeEnds(5, 60, 600);
+
 //        background.add(new End(13, 96)); // 13
 //        background.add(new End(141, 96)); // 141
 //        background.add(new End(141 + 141 - 13, 96)); // 269
@@ -109,14 +118,22 @@ public class Level {
         }
     }
 
-    public void initializeEnds(int numberOfEnds, int endWidth, int windowWidth) {
+    public void initializeEnds(int numberOfEnds, int endWidth, int windowWidth) { // TODO: will prolly encapsulate functionality in separate class
+        // works out distance between number of ends, puts ends in array and sets CTF specific conditions
+
+        ctfEndNo = random.nextInt(ends.length);
         this.ends = new End[numberOfEnds];  // Array to hold the End objects
         int remainingSpace = windowWidth - (numberOfEnds * endWidth);
         int gap = remainingSpace / (numberOfEnds + 1);
 
         for (int i = 0; i < numberOfEnds; i++) {
             int xPosition = gap + i * (endWidth + gap);
-            this.ends[i] = new End(xPosition, 96);  // Initialize and store in the array
+            this.ends[i] = new End(xPosition, 96, i, numberOfEnds);  // Initialize and store in the array
+            if (i == ctfEndNo && animal.getCtfEnd()){
+                this.ends[i].setCtfActive(true);
+                this.ends[i].setImage(new Image("file:src/main/resources/images/ctfEnd.png", 60, 60, true, true));
+
+            }
             background.add(this.ends[i]);  // Add each End to the background
         }
 

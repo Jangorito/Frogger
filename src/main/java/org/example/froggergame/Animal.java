@@ -268,7 +268,7 @@ public class Animal extends Actor {
 
 	private void handleTurtleInteraction() {
 		move(-1, 0);
-	}
+	} // TODO: change based on difficulty?
 
 	private void handleWetTurtleInteraction() {
 		WetTurtle wetTurtle = getIntersectingObjects(WetTurtle.class).get(0);
@@ -298,6 +298,8 @@ public class Animal extends Actor {
 		if (endPoint.isCtfActive()) {
 			snagged = true;
 			points += 70;
+			setImage(new Image("file:src/main/resources/images/froggerDown.png", imgSize, imgSize, true, true));
+
 		}
 		else{
 			points -= 50;
@@ -306,6 +308,11 @@ public class Animal extends Actor {
 		changeScore();
 	}
 	private void checkGameOver() {
+		if (ctfEnd){
+
+		}else{
+
+		}
 		if (end == 5) {
 			stop = true;
 		}
@@ -319,6 +326,7 @@ public class Animal extends Actor {
 	public void setCtfEnd(boolean ctfEnd) {
 		this.ctfEnd = ctfEnd;
 	}
+	public boolean getCtfEnd() { return ctfEnd;}
 
 	public boolean getStop() {
 		return end==5;
