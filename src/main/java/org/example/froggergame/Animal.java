@@ -234,7 +234,6 @@ public class Animal extends Actor {
 					changeScore = true;
 				}
 			}
-
 		}
 	}
 
@@ -279,6 +278,7 @@ public class Animal extends Actor {
 		}
 	}
 
+	// End interaction for if game mode is set to normal
 	private void handleEndInteraction() { //
 		End endPoint = getIntersectingObjects(End.class).get(0);
 		if (endPoint.isActivated()) {
@@ -293,19 +293,26 @@ public class Animal extends Actor {
 		resetPosition();
 	}
 
+	// End interaction for if game mode is set to CTF
 	private void handleCtfEndInteraction() { // TODO:
 		End endPoint = getIntersectingObjects(End.class).get(0);
 		if (endPoint.isCtfActive()) {
 			snagged = true;
 			points += 70;
+			// turn around frog
 			setImage(new Image("file:src/main/resources/images/froggerDown.png", imgSize, imgSize, true, true));
-
+			// change end image
+			endPoint.setImage(new Image("file:src/main/resources/images/End.png", 60, 60, true, true));
+			// TODO: reset frogger to be in the middle of endpoint
+			// TODO: CTF points functionality (perhaps a different end var?)
 		}
 		else{
 			points -= 50;
 			resetPosition();
 		}
-		changeScore();
+		changeScore = true;
+		// TODO: make sure you're not changing scores forever (currently are)
+		// changeScore();
 	}
 	private void checkGameOver() {
 		if (ctfEnd){
@@ -342,9 +349,6 @@ public class Animal extends Actor {
 			return true;
 		}
 		return false;
-		
 	}
-	
-
 }
 // TODO: improvements can be made to this class!!

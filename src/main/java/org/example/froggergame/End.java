@@ -24,6 +24,7 @@ public class End extends Actor{
 		setImage(new Image("file:src/main/resources/images/End.png", 60, 60, true, true));
 		setEndID(num);
 		setNoEnds(no);
+
 	}
 
 	private void setEndID(int num){
@@ -47,4 +48,5 @@ public class End extends Actor{
 	public void setCtfActive(boolean ctfActive) {
 		this.ctfActive = ctfActive;
 	}
+
 }

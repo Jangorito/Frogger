@@ -3,12 +3,15 @@ package org.example.froggergame;
 import javafx.scene.image.Image;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 public class Level {
     private MyStage background;
     private Animal animal;
     public End[] ends;
-    int ctfEndNo;
+    public End home;
+    // int ctfEndNo;
+    int[] ctfEndsArray;
     // private double log1Speed = 0.75;
     // private double log2Speed = -2; // TODO: make sure multiplier still works with minuses
     // private double turtleSpeed = -1;
@@ -121,7 +124,11 @@ public class Level {
     public void initializeEnds(int numberOfEnds, int endWidth, int windowWidth) { // TODO: will prolly encapsulate functionality in separate class
         // works out distance between number of ends, puts ends in array and sets CTF specific conditions
 
-        ctfEndNo = random.nextInt(ends.length);
+        int[] ctfEndsArray = new int[numberOfEnds-1];
+        for (int i = 0; i < ctfEndsArray.length; i++) {
+            ctfEndsArray[i] = random.nextInt(numberOfEnds); // Populate array with random indices
+        }
+
         this.ends = new End[numberOfEnds];  // Array to hold the End objects
         int remainingSpace = windowWidth - (numberOfEnds * endWidth);
         int gap = remainingSpace / (numberOfEnds + 1);
@@ -129,14 +136,23 @@ public class Level {
         for (int i = 0; i < numberOfEnds; i++) {
             int xPosition = gap + i * (endWidth + gap);
             this.ends[i] = new End(xPosition, 96, i, numberOfEnds);  // Initialize and store in the array
-            if (i == ctfEndNo && animal.getCtfEnd()){
+
+            if (i == ctfEndsArray[0] && animal.getCtfEnd()){ // TODO: turn this into a function can set the next object in the array to be the next active endpoint
                 this.ends[i].setCtfActive(true);
                 this.ends[i].setImage(new Image("file:src/main/resources/images/ctfEnd.png", 60, 60, true, true));
+            }
 
+            if (i == 2 && animal.getCtfEnd()){ // setting home endPoint to be in the middle
+                this.home = new End(xPosition, (int) (679.8 + 13.3333333*2), 10, 10);
             }
             background.add(this.ends[i]);  // Add each End to the background
         }
 
+        background.add(this.home);
+    }
+
+    public int[] getCtfEndsArray(){
+        return ctfEndsArray;
     }
 
 }
