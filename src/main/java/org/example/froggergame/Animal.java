@@ -19,6 +19,7 @@ public class Animal extends Actor {
 	Image imgD2;
 	int points = 0;
 	int end = 0;
+	int ctfEndGame = 0;
 
 	// movement vars
 	double movement = 13.3333333*2; // movement cost in the Y direction
@@ -250,6 +251,7 @@ public class Animal extends Actor {
 			}
 			else{
 				handleCtfEndInteraction();
+				handleHomeInteraction();
 			}
 		} else if (getY() < 413) {
 			waterDeath = true;
@@ -314,12 +316,25 @@ public class Animal extends Actor {
 		// TODO: make sure you're not changing scores forever (currently are)
 		// changeScore();
 	}
-	private void checkGameOver() {
-		if (ctfEnd){
 
-		}else{
-
+	// Home interaction when game mode is set to CTF
+	private void handleHomeInteraction(){
+		End endPoint = getIntersectingObjects(End.class).get(0);
+		if (snagged) {
+			if (endPoint.getEndID() == 10) {
+				snagged = false;
+				points += 100;
+				resetPosition();
+				}
+			}
+		changeScore = true;
 		}
+
+	private void checkGameOver() {
+		// if (ctfEnd){
+		// }else{
+//
+		// }
 		if (end == 5) {
 			stop = true;
 		}

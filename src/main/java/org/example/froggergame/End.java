@@ -49,4 +49,6 @@ public class End extends Actor{
 		this.ctfActive = ctfActive;
 	}
 
+	public int getEndID() { return endID; }
+
 }
