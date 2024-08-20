@@ -43,7 +43,7 @@ public class End extends Actor{
 	public boolean isActivated() {
 		return activated;
 	}
-	public boolean isCtfActive() { return ctfActive; }
+	public boolean isCtfActive() { return this.ctfActive; }
 
 	public void setCtfActive(boolean ctfActive) {
 		this.ctfActive = ctfActive;

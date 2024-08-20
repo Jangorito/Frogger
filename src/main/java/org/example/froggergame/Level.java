@@ -9,6 +9,7 @@ public class Level {
     private MyStage background;
     private Animal animal;
     public End[] ends;
+    public ArrayList<End> ends1;
     public End home;
     // int ctfEndNo;
     int[] ctfEndsArray;
@@ -18,13 +19,13 @@ public class Level {
     // private double vehicleSpeed = 1;
     // private double car2Speed = -5;
     private double multiplier;
-    private Random random;
 
     public Level(MyStage background, Animal animal) {
         this.background = background;
         this.animal = animal;
         this.multiplier = 1;
-        this.random = new Random();
+
+
 //        this.ends = new End[0];
     }
 
@@ -80,6 +81,11 @@ public class Level {
 
         // ends setup
         initializeEnds(5, 60, 600);
+        animal.inter = getCtfEndsArray();
+        animal.endsInCtfOrder = getInOrder();
+        System.out.println(STR."\{this.ends1} <-- this.ends1 outside of intialize Ends");
+        System.out.println(STR."\{animal.inter} <-- animal.inter outside of intialize Ends");
+        System.out.println(STR."\{Arrays.toString(animal.endsInCtfOrder)} <-- animal.endsInCtfOrder outside of intialize Ends");
 
 //        background.add(new End(13, 96)); // 13
 //        background.add(new End(141, 96)); // 141
@@ -118,41 +124,84 @@ public class Level {
     public void setEndCond(int mode){
         if (mode == 1) {
             animal.setCtfEnd(true);
+            animal.setFlagsToGrab(3);
         }
     }
 
     public void initializeEnds(int numberOfEnds, int endWidth, int windowWidth) { // TODO: will prolly encapsulate functionality in separate class
         // works out distance between number of ends, puts ends in array and sets CTF specific conditions
+        System.out.println(" ");
+        System.out.println("___Initialize Ends____________________:");
 
+        Random random = new Random();
         int[] ctfEndsArray = new int[numberOfEnds-1];
-        for (int i = 0; i < ctfEndsArray.length; i++) {
-            ctfEndsArray[i] = random.nextInt(numberOfEnds); // Populate array with random indices
+        int count = 0;
+        while (count < ctfEndsArray.length){
+            int randomNum = random.nextInt(numberOfEnds);
+            if (!contains(ctfEndsArray, randomNum)){
+                ctfEndsArray[count] = randomNum;
+                count += 1;
+            }
         }
+//        for (int i = 0; i < ctfEndsArray.length; i++) {
+//            int randomNum = random.nextInt(numberOfEnds);
+//            // while (randomNum )
+//            ctfEndsArray[i] = random.nextInt(numberOfEnds); // Populate array with random indices
+//            ctfEndsArray
+//        }
 
-        this.ends = new End[numberOfEnds];  // Array to hold the End objects
+        this.ends1 = new ArrayList<End>();
+
+        // this.ends = new End[numberOfEnds];  // Array to hold the End objects
         int remainingSpace = windowWidth - (numberOfEnds * endWidth);
         int gap = remainingSpace / (numberOfEnds + 1);
 
         for (int i = 0; i < numberOfEnds; i++) {
             int xPosition = gap + i * (endWidth + gap);
-            this.ends[i] = new End(xPosition, 96, i, numberOfEnds);  // Initialize and store in the array
+            // this.ends[i] = new End(xPosition, 96, i, numberOfEnds);  // Initialize and store in the array
+            this.ends1.add(new End(xPosition, 96, i, numberOfEnds)); // Initialize and store in the array
 
             if (i == ctfEndsArray[0] && animal.getCtfEnd()){ // TODO: turn this into a function can set the next object in the array to be the next active endpoint
-                this.ends[i].setCtfActive(true);
-                this.ends[i].setImage(new Image("file:src/main/resources/images/ctfEnd.png", 60, 60, true, true));
+                // System.out.println(STR."\{this.ends[i]} <-- unsnagged/(1st) Flag End (original?) address");
+                // System.out.println(STR."\{this.ends[i].isCtfActive()} <-- Level's orignal flag state before being set");
+                // this.ends[i].setCtfActive(true);
+                // System.out.println(STR."\{this.ends[i].isCtfActive()} <-- Level's orignal flag state after being set");
+                // this.ends[i].setImage(new Image("file:src/main/resources/images/ctfEnd.png", 60, 60, true, true));
+
+                System.out.println(STR."\{this.ends1.get(i)} <-- unsnagged/(1st) Flag End (original?) address with an index of: ");
+                System.out.println(STR."\{this.ends1.get(i).endID}");
+                System.out.println(STR."\{this.ends1.get(i).isCtfActive()} <-- Level's orignal flag state before being set");
+                this.ends1.get(i).setCtfActive(true);
+                System.out.println(STR."\{this.ends1.get(i).isCtfActive()} <-- Level's orignal flag state after being set");
+                this.ends1.get(i).setImage(new Image("file:src/main/resources/images/ctfEnd.png", 60, 60, true, true));
+
+                this.ends1.get(i).setCtfActive(true);
+                this.ends1.get(i).setImage(new Image("file:src/main/resources/images/ctfEnd.png", 60, 60, true, true));
             }
 
             if (i == 2 && animal.getCtfEnd()){ // setting home endPoint to be in the middle
                 this.home = new End(xPosition, (int) (679.8 + 13.3333333*2), 10, 10);
             }
-            background.add(this.ends[i]);  // Add each End to the background
-        }
+            // background.add(this.ends[i]);  // Add each End to the background
+            background.add(this.ends1.get(i));
 
+        }
+        setCtfEndsArray(ctfEndsArray);
         background.add(this.home);
+        System.out.println("___Initialize Ends____________________");
+        System.out.println(" ");
     }
 
-    public int[] getCtfEndsArray(){
-        return ctfEndsArray;
+    public ArrayList<End> getCtfEndsArray(){
+        return ends1;
+    }
+    public void setCtfEndsArray(int[] array){
+        this.ctfEndsArray = array;
+    }
+    public int[] getInOrder() { return ctfEndsArray; }
+
+    public boolean contains(int[] array, int value) {
+        return Arrays.stream(array).anyMatch(i -> i == value);
     }
 
 }
