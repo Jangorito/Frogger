@@ -179,14 +179,16 @@ public class Level {
                 this.ends1.get(i).setImage(new Image("file:src/main/resources/images/ctfEnd.png", 60, 60, true, true));
             }
 
-            if (i == 2 && animal.getCtfEnd()){ // setting home endPoint to be in the middle
-                this.home = new End(xPosition, (int) (679.8 + 13.3333333*2), 10, 10);
-            }
+//            if (i == 2 && animal.getCtfEnd()){ // setting home endPoint to be in the middle
+//                System.out.println("We're asking jojolistic for:" + xPosition);
+//                this.home = new End(xPosition, (int) (679.8 + 13.3333333*2), 10, 10);
+//            }
             // background.add(this.ends[i]);  // Add each End to the background
             background.add(this.ends1.get(i));
 
         }
         setCtfEndsArray(ctfEndsArray);
+        this.home = new End(270, (int) (679.8 + 13.3333333*2), 10, 10);
         background.add(this.home);
         System.out.println("___Initialize Ends____________________");
         System.out.println(" ");
