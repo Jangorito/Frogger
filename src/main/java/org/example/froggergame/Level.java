@@ -18,14 +18,12 @@ public class Level {
     // private double turtleSpeed = -1;
     // private double vehicleSpeed = 1;
     // private double car2Speed = -5;
-    private double multiplier;
+    private double multiplier; // TODO: can kill moretime
 
     public Level(MyStage background, Animal animal) {
         this.background = background;
         this.animal = animal;
         this.multiplier = 1;
-
-
 //        this.ends = new End[0];
     }
 

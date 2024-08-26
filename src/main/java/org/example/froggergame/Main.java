@@ -8,11 +8,9 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.text.Text;
+import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 public class Main extends Application {
 	AnimationTimer timer;
@@ -23,25 +21,45 @@ public class Main extends Application {
 	}
 	// calls start
 
-
-	// stage = window
-	// scene = contents
-
 	// TODO: recreate start method in a modular way + --find/design better background image-- + implement GUI + levels
 	@Override
-	public void start(Stage primaryStage) throws Exception {
-	    background = new MyStage();
-	    Scene scene  = new Scene(background,600,800);
+	public void start(Stage primaryStage) {
+		Menu menu = new Menu(primaryStage,this );
+		menu.showMenu();
+	}
+
+	// Method to start the game with selected level and difficulty
+	public void startGame(Stage primaryStage, int difficulty, int level) {
+		background = new MyStage();
+		Scene gameScene = new Scene(background, 600, 800);
 
 		animal = new Animal("file:src/main/resources/images/froggerUp.png");
-		Level level1 = new Level(background, animal);
-		level1.setupLevel(2, 1);
+		Level gameLevel = new Level(background, animal);
+		gameLevel.setupLevel(difficulty, level);
 
 		background.start();
-		primaryStage.setScene(scene);
+		primaryStage.setScene(gameScene);
 		primaryStage.show();
-		start();  
+		startGameLoop();
 	}
+
+	// OLD_______________________________________________________________________________
+//	@Override
+//	public void start(Stage primaryStage) throws Exception {
+//	    background = new MyStage();
+//	    Scene scene  = new Scene(background,600,800);
+//
+//		animal = new Animal("file:src/main/resources/images/froggerUp.png");
+//		Level level1 = new Level(background, animal);
+//		level1.setupLevel(2, 1);
+//
+//		background.start();
+//		primaryStage.setScene(scene);
+//		primaryStage.show();
+//		start();
+//	}
+
+
 	public void createTimer() {
         timer = new AnimationTimer() {
             @Override
@@ -63,15 +81,14 @@ public class Main extends Application {
             }
         };
     }
-	public void start() {
-		// background.playMusic();
-    	createTimer();
-        timer.start();
-    }
+	public void startGameLoop() {
+		createTimer();
+		timer.start();
+	}
 
-    public void stop() {
-        timer.stop();
-    }
+	public void stopGameLoop() {
+		timer.stop();
+	}
     
     public void setNumber(int n) {
     	int shift = 0;
