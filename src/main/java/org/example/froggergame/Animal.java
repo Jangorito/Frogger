@@ -1,14 +1,13 @@
 package org.example.froggergame;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
+import javafx.animation.PauseTransition;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.util.Duration;
 
-// TODO: Split class into Animal and something else that contains rules for game.
-//  Adversely, add it into Level.Java? Particularly Game End
 public class Animal extends Actor {
 	Image imgW1;
 	Image imgA1;
@@ -20,7 +19,6 @@ public class Animal extends Actor {
 	Image imgD2;
 	int points = 0;
 	int end = 0;
-	int ctfEndGame = 0;
 
 	// movement vars
 	double movement = 13.3333333*2; // movement cost in the Y direction
@@ -33,16 +31,19 @@ public class Animal extends Actor {
 	boolean carDeath = false, waterDeath = false; // death states
 	boolean stop = false; // game is won
 	boolean changeScore = false; // if the score has changed
+	boolean changeLives = false;
 	int carD = 0; // counter for death animation
 	double w = 800; // max height reached by Frogger
-	boolean ctfEnd = false; // whether the ends are capture the flag ends [GAMEMODE!!!!]
+	boolean ctfGameMode = false; // whether the ends are capture the flag ends [GAMEMODE!!!!]
 	boolean snagged = false;
-	int flagsToGrab = 1;
+	int flagsToGrab = 0;
 	int[] endsInCtfOrder;
 	int stashed = 0;
+	int lives = 1;
+	// list of ends
 	ArrayList<End> inter = new ArrayList<End>();
 
-	public Animal(String imageLink) {
+	public Animal(String imageLink, GameConfig states) {
 		// setting frog image and position
 		setImage(new Image(imageLink, imgSize, imgSize, true, true));
 		resetPosition();
@@ -61,6 +62,10 @@ public class Animal extends Actor {
 		setImage(imgW1);
 		initializeInputHandlers();
 
+		// setting appropriate game states
+        ctfGameMode = states.getGameMode() == 2;
+		flagsToGrab = states.getNoFlags();
+		lives = states.getLives();
 	}
 	private void initializeInputHandlers() {
 		setOnKeyPressed(this::handleKeyPressed);
@@ -95,6 +100,11 @@ public class Animal extends Actor {
 			move(movementX, 0);
 			setImage(imgD2);
 			second = true;
+		}
+		else if (code == KeyCode.SPACE){
+			System.out.println(STR."\{getX()} and \{getY()}");
+			// setImage(new Image("file:src/main/resources/images/0.png", 30, 30, true, true));
+
 		}
 	}
 
@@ -150,9 +160,8 @@ public class Animal extends Actor {
 	@Override
 	public void act(long now) {
 		checkBoundaries();
-		// handleCollisions(now);
+		handleCollisions(now);
 		checkInteractions();
-		checkGameOver();
 	}
 
 	private void checkBoundaries() {
@@ -167,7 +176,7 @@ public class Animal extends Actor {
 		}
 	}
 
-	private void handleCollisions(long now) {								// -TODO: are there any more collisions to add?-
+	private void handleCollisions(long now) {
 		if (getIntersectingObjects(Obstacle.class).size() >= 1) {
 			carDeath = true;
 		}
@@ -179,7 +188,7 @@ public class Animal extends Actor {
 		}
 	}
 
-	private void handleWaterDeath(long now) {								// TODO: finalise method
+	private void handleWaterDeath(long now) {
 		if (waterDeath) {
 			noMove = true;
 			if ((now)% 11 ==0) {
@@ -198,11 +207,19 @@ public class Animal extends Actor {
 				setImage(new Image("file:src/main/resources/images/waterdeath4.png", imgSize,imgSize , true, true));
 			}
 			if (carD == 5) {
+				lives -= 1;
+				changeLives = true;
 				resetPosition();
 				waterDeath = false;
 				carD = 0;
 				setImage(new Image("file:src/main/resources/images/froggerUp.png", imgSize, imgSize, true, true));
-				noMove = false;
+
+
+				PauseTransition pause = new PauseTransition(Duration.seconds(1)); // 2-second delay
+				pause.setOnFinished(event -> noMove = false); // Action to execute after the delay
+				pause.play(); // Start the pause
+				
+
 				if (points>50) {
 					points-=50;
 					changeScore = true;
@@ -228,11 +245,19 @@ public class Animal extends Actor {
 				setImage(new Image("file:src/main/resources/images/cardeath3.png", imgSize, imgSize, true, true));
 			}
 			if (carD == 4) {
+				lives -= 1;
+				changeLives = true;
 				resetPosition();
 				carDeath = false;
 				carD = 0;
 				setImage(new Image("file:src/main/resources/images/froggerUp.png", imgSize, imgSize, true, true));
-				noMove = false;
+
+				// Create a pause transition for the desired delay
+				PauseTransition pause = new PauseTransition(Duration.seconds(1)); // 2-second delay
+				pause.setOnFinished(event -> noMove = false); // Action to execute after the delay
+				pause.play(); // Start the pause
+				
+				// noMove = false;
 				if (points>50) {
 					points-=50;
 					changeScore = true;
@@ -249,7 +274,7 @@ public class Animal extends Actor {
 		} else if (!getIntersectingObjects(WetTurtle.class).isEmpty()) {
 			handleWetTurtleInteraction();
 		} else if (!getIntersectingObjects(End.class).isEmpty()) {
-			if (!ctfEnd) {
+			if (!ctfGameMode) {
 				handleEndInteraction();
 			}
 			else{
@@ -307,15 +332,17 @@ public class Animal extends Actor {
 		if (endPoint.isCtfActive()) {
 			if (!snagged) {
 				noMove = true;
-				// System.out.println(" ");
-				// System.out.println("___________flag interaction:");
-				// System.out.println("flag successfully snagged");
 				snagged = true;
 				points += 70;
 				setPosition(endPoint);
 				endPoint.setImage(new Image("file:src/main/resources/images/End.png", 60, 60, true, true));
-				noMove = false;
-				// System.out.println(STR."\{endPoint} <-- snagged Flag End address");
+
+				// Create a pause transition for the desired delay
+				PauseTransition pause = new PauseTransition(Duration.seconds(1)); // 2-second delay
+				pause.setOnFinished(event -> noMove = false); // Action to execute after the delay
+				pause.play(); // Start the pause
+				
+				//noMove = false;
 			}
 		}
 
@@ -324,106 +351,110 @@ public class Animal extends Actor {
 			noMove = true;
 			points -= 50;
 			resetPosition();
-			noMove = false;
+
+			// Create a pause transition for the desired delay
+			PauseTransition pause = new PauseTransition(Duration.seconds(1)); // 2-second delay
+			pause.setOnFinished(event -> noMove = false); // Action to execute after the delay
+			pause.play(); // Start the pause
+			
+			// noMove = false;
 		}
 
 		// home interaction
 		if (endPoint.getEndID() == 10){
 			if (snagged) {
 				noMove = true;
-				// System.out.println(" ");
-				// System.out.println("___________home interaction:");
-				// System.out.println("flag successfully captured");
 				stashed += 1;
-				snagged = false;
 				points += 100;
-				resetPosition();
 				flagSetting();
-				noMove = false;
+				snagged = false;
+				resetPosition();
+
+				PauseTransition pause = new PauseTransition(Duration.seconds(1)); // 2-second delay
+				pause.setOnFinished(event -> noMove = false); // Action to execute after the delay
+				pause.play(); // Start the pause
+				
+				// noMove = false;
 			}
 		}
 		changeScore = true;
-	}
-
-	private void checkGameOver() { // TODO: this don't really do nuttin rn, need to sort...
-		// if (ctfEnd){
-		// }else{
-//
-		// }
-		if (end == 5) {
-			stop = true;
-		}
 	}
 
 	private void resetPosition() {
 		setImage(new Image("file:src/main/resources/images/froggerUp.png", imgSize, imgSize, true, true));
 		setX(280);
 		setY(679.8 + movement);
-	}
 
+		if (ctfGameMode){
+			if (snagged){
+				snagged = false;
+				flagSetting();
+			}
+		}
+	}
 
 	private void setPosition(End endpoint){
 		// turn around ANIMAL frog
 		setImage(new Image("file:src/main/resources/images/froggerDown.png", imgSize, imgSize, true, true));
 
-		// TODO: reset frogger to be in the middle of endpoint
 		setX(endpoint.getX() + 15);
-		setY(endpoint.getY());
+		setY(122.6666666);
 	}
-	public void setCtfEnd(boolean ctfEnd) {
-		this.ctfEnd = ctfEnd;
-	}
-	public void setFlagsToGrab(int flags){
-		this.flagsToGrab = flags;
-	}
-	public boolean getCtfEnd() { return ctfEnd;} // GET GAMEMODE
+	public boolean getCtfGameMode() { return ctfGameMode;} // GET GAMEMODE
 	public boolean getStop() {
-		boolean ended = false;
-		if (ctfEnd){
+		if(lives == 0){
+			System.out.println("you dead");
+			return true;
+		}
+		else if (this.ctfGameMode){
             return stashed == flagsToGrab;
 		}
-		else{
+		else if (!this.ctfGameMode){
             return end == 5;
 		}
-    }										// TODO: if you've reached end 5 times the game is completed
+		return false;
+    }
 	public int getPoints() {
 		return points;
 	}
 
+	public int getLives() {
+		return lives;
+	}
 	public void flagSetting(){
 		int previousFlagIndex;
 		int prospectiveFlagIndex;
 
-		// System.out.println(" ");
-		// System.out.println("___________flag Setting:");
-		// System.out.println(" ");
-
-		if (stashed < flagsToGrab){
-			previousFlagIndex = endsInCtfOrder[stashed-1];
+		if (!snagged){
+			inter.get(endsInCtfOrder[stashed]).setImage(new Image("file:src/main/resources/images/ctfEnd.png", 60, 60, true, true));
+			return;
+		}
+		else {
+			previousFlagIndex = endsInCtfOrder[stashed - 1];
 			prospectiveFlagIndex = endsInCtfOrder[stashed];
 
-			// System.out.println(STR."stashed = \{stashed} so you have \{flagsToGrab} more to grab");
-			// System.out.println(STR."REMINDER: endsInCtfOrder = \{Arrays.toString(endsInCtfOrder)}");
-			// System.out.println(STR."previousFlagIndex = \{previousFlagIndex} <> prospectiveFlagIndex = \{prospectiveFlagIndex}");
-			// System.out.println(STR."Captured:\{inter.get(previousFlagIndex).isCtfActive()} <> Next:\{inter.get(prospectiveFlagIndex).isCtfActive()}");
-
-			inter.get(previousFlagIndex).setCtfActive(false);
-			inter.get(previousFlagIndex).setImage(new Image("file:src/main/resources/images/End.png", 60, 60, true, true));
-			inter.get(prospectiveFlagIndex).setCtfActive(true);
-			inter.get(prospectiveFlagIndex).setImage(new Image("file:src/main/resources/images/ctfEnd.png", 60, 60, true, true));
-
-			// System.out.println("AFTER CHANGES TO BOTH:");
-			// System.out.println(STR."Captured:\{inter.get(previousFlagIndex).isCtfActive()} <> Next:\{inter.get(prospectiveFlagIndex).isCtfActive()}");
-			// System.out.println("Osa was here");
+			if (stashed < flagsToGrab) {
+				inter.get(previousFlagIndex).setCtfActive(false);
+				inter.get(previousFlagIndex).setImage(new Image("file:src/main/resources/images/End.png", 60, 60, true, true));
+				inter.get(prospectiveFlagIndex).setCtfActive(true);
+				inter.get(prospectiveFlagIndex).setImage(new Image("file:src/main/resources/images/ctfEnd.png", 60, 60, true, true));
+			}
 		}
-		else{
-			// TODO: how comes I can still run to the endpoint and back and get flags?
-			System.out.println(STR."stashed = \{stashed} out of \{flagsToGrab} flags to grab. We should prolly be tryna end the game from here?");
-		}
+//		else{
+//			System.out.println(STR."stashed = \{stashed} out of \{flagsToGrab} flags to grab. We should prolly be tryna end the game from here?");
+//		}
 	}
 	public boolean changeScore() {
 		if (changeScore) {
 			changeScore = false;
+			return true;
+		}
+		return false;
+	}
+
+	public boolean changeLives() {
+		if (changeLives) {
+			changeLives = false;
 			return true;
 		}
 		return false;

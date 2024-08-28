@@ -10,8 +10,6 @@ public class GameConfig {
     private int volumeLevel;
     private int gameMode;
     private int noEnds;
-
-
     private int noFlags;
 
     public GameConfig() {
@@ -53,27 +51,38 @@ public class GameConfig {
     public int getGameMode() {
         return gameMode;
     }
-
     public void setGameMode (int gameMode) {
         this.gameMode = gameMode;
     }
 
     public void setDifficulty(int mode){
+        System.out.println("just set difficulty");
         // easy
         if (mode == 1){
             this.lives = 15;
             this.speedMultiplier = 0.75;
+            if (this.getGameMode() == 1){
+                setNoFlags(3);
+            }
         }
 
         // medium
         if (mode == 2){
             this.lives = 10;
+            if (this.getGameMode() == 1){
+                setNoFlags(4);
+            }
+
         }
 
         // hard
         if (mode == 3){
             this.lives = 5;
             this.speedMultiplier = 1.5;
+            if (this.getGameMode() == 1){
+                setNoFlags(5);
+            }
+
         }
     }
     public int getDifficulty() {
