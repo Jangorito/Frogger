@@ -203,7 +203,7 @@ public class Menu {
         // Clear existing children in the root layout
         rootLayout.getChildren().clear();
 
-        // Create GridPane layout for Advanced Setup
+        // GridPane layout for Advanced Setup
         GridPane gridPane = new GridPane();
         gridPane.setPadding(new Insets(10));
         gridPane.setVgap(10);
@@ -213,9 +213,42 @@ public class Menu {
         // Sliders for advanced settings
         Label flagLabel = new Label("Number of Flags:");
         Slider lives = new Slider(0, 20, 5);
+        lives.setShowTickLabels(true);
+        lives.setShowTickMarks(true);
+        Label livesValueLabel = new Label(String.valueOf((int) lives.getValue()));
+
         Slider speed = new Slider(-0.5, 2, 1);
-        Slider noEnds = new Slider(1, 5, 1);
+        speed.setShowTickLabels(true);
+        speed.setShowTickMarks(true);
+        Label speedValueLabel = new Label(String.format("%.2f", speed.getValue()));
+
+        Slider noEnds = new Slider(1, 5, 5);
+        noEnds.setShowTickLabels(true);
+        noEnds.setShowTickMarks(true);
+        Label noEndsValueLabel = new Label(String.valueOf((int) noEnds.getValue()));
+
         Slider noFlags = new Slider(1, 5, 1);
+        noFlags.setShowTickLabels(true);
+        noFlags.setShowTickMarks(true);
+        Label noFlagsValueLabel = new Label(String.valueOf((int) noFlags.getValue()));
+
+        // Add listeners to update labels when sliders are moved
+        lives.valueProperty().addListener((observable, oldValue, newValue) -> {
+            livesValueLabel.setText(String.valueOf(newValue.intValue()));
+        });
+
+        speed.valueProperty().addListener((observable, oldValue, newValue) -> {
+            speedValueLabel.setText(String.format("%.2f", newValue.doubleValue()));
+        });
+
+        noEnds.valueProperty().addListener((observable, oldValue, newValue) -> {
+            noEndsValueLabel.setText(String.valueOf(newValue.intValue()));
+        });
+
+        noFlags.valueProperty().addListener((observable, oldValue, newValue) -> {
+            noFlagsValueLabel.setText(String.valueOf(newValue.intValue()));
+        });
+
 
         // ComboBox for game mode selection
         ComboBox<String> gameModeComboBox = new ComboBox<>();
@@ -225,9 +258,10 @@ public class Menu {
             String selected = gameModeComboBox.getValue();
             switch (selected) {
                 case "Standard Frogger":
-                    if (gridPane.getChildren().contains(flagLabel)){
+                    if (gridPane.getChildren().contains(flagLabel)) {
                         gridPane.getChildren().remove(flagLabel);
                         gridPane.getChildren().remove(noFlags);
+                        gridPane.getChildren().remove(noFlagsValueLabel);
                     }
                     gameConfig.setGameMode(1);
                     break;
@@ -235,6 +269,7 @@ public class Menu {
                     gameConfig.setGameMode(2);
                     gridPane.add(flagLabel, 0, 4);
                     gridPane.add(noFlags, 1, 4);
+                    gridPane.add(noFlagsValueLabel, 2, 4);
                     break;
             }
         });
@@ -247,26 +282,39 @@ public class Menu {
 
         // Start button
         Button startButton = new Button("Start Game");
-        startButton.setOnAction(event -> mainApp.startGame(primaryStage, gameConfig));
+        startButton.setOnAction(event -> {
+            // Retrieve slider values and update gameConfig
+            gameConfig.setLives((int) lives.getValue());
+            gameConfig.setMultiplier(speed.getValue());
+            gameConfig.setNoEnds((int) noEnds.getValue());
+            if (gameConfig.getGameMode() == 2) { // Capture the Flag mode
+                gameConfig.setNoFlags((int) noFlags.getValue());
+            }
+
+            // Start the game with the updated configuration
+            mainApp.startGame(primaryStage, gameConfig);
+        });
+
 
         // Back button
         Button backButton = new Button("Go Back");
         backButton.setOnAction(event -> showMenu());
 
         // Add elements to GridPane
-        //                  COLUMN      ROW         CLMNSPN     ROWSPN
         gridPane.add(new Label("Number of Lives:"), 0, 0);
         gridPane.add(lives, 1, 0);
+        gridPane.add(livesValueLabel, 2, 0); // Display current value of 'lives'
 
         gridPane.add(new Label("Game Speed:"), 0, 1);
         gridPane.add(speed, 1, 1);
+        gridPane.add(speedValueLabel, 2, 1); // Display current value of 'speed'
 
         gridPane.add(new Label("Number of Ends:"), 0, 2);
         gridPane.add(noEnds, 1, 2);
+        gridPane.add(noEndsValueLabel, 2, 2); // Display current value of 'noEnds'
 
         gridPane.add(new Label("Select Game Mode:"), 0, 3);
         gridPane.add(gameModeComboBox, 1, 3);
-
 
         gridPane.add(musicCheckBox, 0, 5);
 
