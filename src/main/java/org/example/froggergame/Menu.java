@@ -25,6 +25,11 @@ import javafx.scene.image.ImageView;
 import java.io.File;
 import java.io.InputStream;
 
+/**
+ * The Menu class is responsible for displaying and handling the user interface
+ * for the Frogger game's main menu and setup options. It provides functionality
+ * for navigating between different menu options and configuring game settings.
+ */
 public class Menu {
     private Stage primaryStage;
     private Main mainApp;
@@ -33,11 +38,18 @@ public class Menu {
     Font font;
     boolean init;
 
+    /**
+     * Constructs a new Menu instance.
+     *
+     * @param primaryStage the primary stage for this application.
+     * @param mainApp reference to the main application instance.
+     */
     public Menu(Stage primaryStage, Main mainApp) {
         this.primaryStage = primaryStage;
         this.mainApp = mainApp;
         this.gameConfig = new GameConfig(); // Initialize gameConfig
         this.rootLayout = new VBox();
+
         // Use class loader to get the font as a resource stream
         InputStream fontStream = getClass().getResourceAsStream("/RetrovilleNC.ttf");
         this.font = Font.loadFont(fontStream, 16);
@@ -57,6 +69,9 @@ public class Menu {
         }
     }
 
+    /**
+     * Displays the initial menu with a prompt to start the game.
+     */
     public void showInit(){
         rootLayout.getChildren().clear();
         rootLayout.setPadding(Insets.EMPTY);  // Ensure no padding
@@ -112,6 +127,9 @@ public class Menu {
 
     }
 
+    /**
+     * Displays the main menu with options for quick setup and advanced setup.
+     */
     public void showMenu() {
         rootLayout.getChildren().clear();
 
@@ -126,7 +144,9 @@ public class Menu {
 
     }
 
-
+    /**
+     * Displays the quick setup options.
+     */
     private void QuickSetUp() {
         // Clear existing children in the root layout
         rootLayout.getChildren().clear();
@@ -199,6 +219,10 @@ public class Menu {
         rootLayout.getChildren().add(gridPane);
 
     }
+
+    /**
+     * Displays the advanced setup options.
+     */
     private void advancedSetUp() {
         // Clear existing children in the root layout
         rootLayout.getChildren().clear();

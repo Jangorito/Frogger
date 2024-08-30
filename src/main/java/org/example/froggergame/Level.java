@@ -5,6 +5,12 @@ import javafx.scene.image.Image;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
+
+/**
+ * Represents a level in the Frogger game, including all game elements such as logs, turtles,
+ * obstacles, and endpoints. The {@code Level} class is responsible for setting up the game environment
+ * based on the configuration options and game settings.
+ */
 public class Level {
     private MyStage background;
     private Animal animal;
@@ -14,6 +20,12 @@ public class Level {
     // int ctfEndNo;
     int[] ctfEndsArray;
 
+    /**
+     * Constructs a {@code Level} instance with the specified background and animal character.
+     *
+     * @param background the background of the game stage.
+     * @param animal the animal character controlled by the player.
+     */
     public Level(MyStage background, Animal animal) {
         this.background = background;
         this.animal = animal;
@@ -34,6 +46,12 @@ public class Level {
     // -1 CAR
     // 1 TRUCK
 
+    /**
+     * Sets up the game level by adding various game elements such as logs, turtles, obstacles, and endpoints.
+     * The setup includes configuring the speed of game elements based on the provided game configuration.
+     *
+     * @param options the {@code GameConfig} object containing game settings.
+     */
     public void setupLevel(GameConfig options) {
         // setting default speeds
         double log1Speed = 0.75;
@@ -41,12 +59,6 @@ public class Level {
         double turtleSpeed = -1;
         double vehicleSpeed = 1;
         double car2Speed = -5;
-        // private double log1Speed = 0.75;
-        // private double log2Speed = -2; // TODO: make sure multiplier still works with minuses
-        // private double turtleSpeed = -1;
-        // private double vehicleSpeed = 1;
-        // private double car2Speed = -5;
-        // TODO: can kill moretime
         double multiplier = options.getMultiplier();
 
         // gameConfig options: lives, speed, ends & TODO: obstacles
@@ -109,6 +121,14 @@ public class Level {
         animal.changeLives = true;
     }
 
+    /**
+     * Initializes the endpoints for the level and sets their order for capture-the-flag (CTF) mode.
+     * Positions the endpoints evenly across the screen and activates a specific endpoint if CTF mode is enabled.
+     *
+     * @param numberOfEnds the number of endpoints to be initialized.
+     * @param endWidth the width of each endpoint.
+     * @param windowWidth the width of the game window.
+     */
     public void initializeEnds(int numberOfEnds, int endWidth, int windowWidth) {
 
         // randomising the order of flags to capture TODO: surely this is only relevant if there are flags to capture??

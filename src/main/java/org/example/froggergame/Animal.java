@@ -8,6 +8,18 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.util.Duration;
 
+/**
+ * Represents the main player-controlled animal (frog) in the Frogger game.
+ * This class manages the frog's movement, interactions with game objects,
+ * game state, and various events such as collisions and deaths.
+ *
+ * <p> The frog can move in four directions using the keyboard keys (W, A, S, D).
+ * It can die from colliding with cars or falling into the water, and the death
+ * animations are managed by this class.
+ *
+ * <p> The game mode can either be normal or Capture The Flag (CTF), with
+ * different rules for interacting with the end zones.
+ */
 public class Animal extends Actor {
 	Image imgW1;
 	Image imgA1;
@@ -43,6 +55,12 @@ public class Animal extends Actor {
 	// list of ends
 	ArrayList<End> inter = new ArrayList<End>();
 
+	/**
+	 * Constructs an Animal object with the specified image link and game configuration.
+	 *
+	 * @param imageLink the initial image file path for the frog
+	 * @param states the game configuration settings for mode and difficulty
+	 */
 	public Animal(String imageLink, GameConfig states) {
 		// setting frog image and position
 		setImage(new Image(imageLink, imgSize, imgSize, true, true));
@@ -72,6 +90,11 @@ public class Animal extends Actor {
 		setOnKeyReleased(this::handleKeyReleased);
 	}
 
+	/**
+	 * Handles key pressed events for movement and game controls.
+	 *
+	 * @param event the key event triggered by the user's input
+	 */
 	private void handleKeyPressed(KeyEvent event) {
 		if (noMove) return;
 
@@ -83,6 +106,11 @@ public class Animal extends Actor {
 		}
 	}
 
+	/**
+	 * Processes the initial key press for movement.
+	 *
+	 * @param code the key code corresponding to the pressed key
+	 */
 	private void handleFirstKeyPress(KeyCode code) {
 		if (code == KeyCode.W) {
 			move(0, -movement);
@@ -101,13 +129,18 @@ public class Animal extends Actor {
 			setImage(imgD2);
 			second = true;
 		}
-		else if (code == KeyCode.SPACE){
-			System.out.println(STR."\{getX()} and \{getY()}");
-			// setImage(new Image("file:src/main/resources/images/0.png", 30, 30, true, true));
-
-		}
+//		else if (code == KeyCode.SPACE){
+//			System.out.println(STR."\{getX()} and \{getY()}");
+//			// setImage(new Image("file:src/main/resources/images/0.png", 30, 30, true, true));
+//
+//		}
 	}
 
+	/**
+	 * Processes the second key press for continued movement.
+	 *
+	 * @param code the key code corresponding to the pressed key
+	 */
 	private void handleSecondKeyPress(KeyCode code) {
 		if (code == KeyCode.W) {
 			move(0, -movement);
@@ -129,6 +162,11 @@ public class Animal extends Actor {
 		}
 	}
 
+	/**
+	 * Handles key released events for stopping the frog's movement.
+	 *
+	 * @param event the key event triggered by the user's input
+	 */
 	private void handleKeyReleased(KeyEvent event) {
 		if (noMove) return;
 
@@ -157,6 +195,12 @@ public class Animal extends Actor {
 		}
 	}
 
+	/**
+	 * Performs actions during each game tick, such as checking boundaries,
+	 * handling collisions, and updating interactions.
+	 *
+	 * @param now the current timestamp in nanoseconds
+	 */
 	@Override
 	public void act(long now) {
 		checkBoundaries();
@@ -176,6 +220,11 @@ public class Animal extends Actor {
 		}
 	}
 
+	/**
+	 * Handles all collision scenarios with different objects in the game.
+	 *
+	 * @param now the current timestamp in nanoseconds
+	 */
 	private void handleCollisions(long now) {
 		if (getIntersectingObjects(Obstacle.class).size() >= 1) {
 			carDeath = true;
@@ -307,7 +356,9 @@ public class Animal extends Actor {
 		}
 	}
 
-	// End interaction for if game mode is set to normal
+	/**
+	 * Handles interactions when the frog reaches an endpoint in normal game mode.
+	 */
 	private void handleEndInteraction() { //
 		End endPoint = getIntersectingObjects(End.class).get(0);
 		if (endPoint.getEndID() != 10){
@@ -324,7 +375,9 @@ public class Animal extends Actor {
 		}
 	}
 
-	// End interaction for if game mode is set to CTF
+	/**
+	 * Handles interactions when the frog reaches an endpoint in Capture The Flag mode.
+	 */
 	private void handleCtfEndInteraction() { // TODO:
 		End endPoint = getIntersectingObjects(End.class).get(0);
 
@@ -380,6 +433,9 @@ public class Animal extends Actor {
 		changeScore = true;
 	}
 
+	/**
+	 * Resets the frog's position to the starting point.
+	 */
 	private void resetPosition() {
 		setImage(new Image("file:src/main/resources/images/froggerUp.png", imgSize, imgSize, true, true));
 		setX(280);
@@ -393,6 +449,11 @@ public class Animal extends Actor {
 		}
 	}
 
+	/**
+	 * Sets the frog's position to a specific endpoint.
+	 *
+	 * @param endpoint the endpoint to move the frog to
+	 */
 	private void setPosition(End endpoint){
 		// turn around ANIMAL frog
 		setImage(new Image("file:src/main/resources/images/froggerDown.png", imgSize, imgSize, true, true));
@@ -400,27 +461,10 @@ public class Animal extends Actor {
 		setX(endpoint.getX() + 15);
 		setY(122.6666666);
 	}
-	public boolean getCtfGameMode() { return ctfGameMode;} // GET GAMEMODE
-	public boolean getStop() {
-		if(lives == 0){
-			System.out.println("you dead");
-			return true;
-		}
-		else if (this.ctfGameMode){
-            return stashed == flagsToGrab;
-		}
-		else if (!this.ctfGameMode){
-            return end == 5;
-		}
-		return false;
-    }
-	public int getPoints() {
-		return points;
-	}
 
-	public int getLives() {
-		return lives;
-	}
+	/**
+	 * Sets flags in the Capture The Flag game mode.
+	 */
 	public void flagSetting(){
 		int previousFlagIndex;
 		int prospectiveFlagIndex;
@@ -444,6 +488,13 @@ public class Animal extends Actor {
 //			System.out.println(STR."stashed = \{stashed} out of \{flagsToGrab} flags to grab. We should prolly be tryna end the game from here?");
 //		}
 	}
+
+
+	/**
+	 * Checks if the score has changed and resets the flag if it has.
+	 *
+	 * @return true if the score has changed, otherwise false
+	 */
 	public boolean changeScore() {
 		if (changeScore) {
 			changeScore = false;
@@ -451,12 +502,39 @@ public class Animal extends Actor {
 		}
 		return false;
 	}
-
+	/**
+	 * Checks if the lives have changed and resets the flag if they have.
+	 *
+	 * @return true if lives have changed, otherwise false
+	 */
 	public boolean changeLives() {
 		if (changeLives) {
 			changeLives = false;
 			return true;
 		}
 		return false;
+	}
+
+
+	public boolean getCtfGameMode() { return ctfGameMode;}
+	public boolean getStop() {
+		if(lives == 0){
+			System.out.println("you dead");
+			return true;
+		}
+		else if (this.ctfGameMode){
+			return stashed == flagsToGrab;
+		}
+		else if (!this.ctfGameMode){
+			return end == 5;
+		}
+		return false;
+	}
+	public int getPoints() {
+		return points;
+	}
+
+	public int getLives() {
+		return lives;
 	}
 }
