@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="JavadocGenerationManager">
-    <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$" />
+    <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$/../FroggerGameDocs" />
     <option name="OPTION_DEPRECATED_LIST" value="false" />
-    <option name="OTHER_OPTIONS" value="javadoc -d Javadoc -sourcepath src -subpackages org.example.froggergame --module-path &quot;C:\Users\Jango\Downloads\openjfx-22.0.2_windows-x64_bin-sdk\javafx-sdk-22.0.2\lib&quot; --add-modules javafx.controls,javafx.fxml,javafx.media " />
     <option name="OPTION_INCLUDE_LIBS" value="true" />
   </component>
   <component name="MavenProjectsManager">
