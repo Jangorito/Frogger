@@ -104,7 +104,7 @@ public class Menu {
         Scene menuScene = new Scene(rootLayout, 600, 800);
 
         // Link the CSS file to the scene
-        menuScene.getStylesheets().add("file:src/main/resources/styles/arcadeStyle.css");
+        menuScene.getStylesheets().add("file:src/main/resources/Styles/Styles/arcadeStyle.css");
 
         Label initText = new Label("PRESS ANY BUTTON TO START");
         initText.getStyleClass().add("glow-label");
