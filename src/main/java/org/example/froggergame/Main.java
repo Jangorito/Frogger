@@ -62,7 +62,7 @@ public class Main extends Application {
 					displayLives(animal.getLives());
 				}
             	if (animal.getStop()) {
-            		System.out.print("STOPP:");
+            		System.out.println("STOPP:");
             		// background.stopMusic();
             		stop();
             		background.stop();

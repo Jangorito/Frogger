@@ -1,0 +1,69 @@
+220023b|2024-09-02|minor changes  (HEAD -> main, origin/main)
+
+04ab56c|2024-09-01|UML files
+
+41bd86d|2024-09-01|Tried to restore UML files (some still missing)  (Checking-Old-Commit-V2)
+
+9cfb02e|2024-09-01|Tried to restore UML files (some still missing)
+
+7d25414|2024-09-01|Tried to restore UML files (some still missing)
+
+d1b8e7e|2024-08-30|Added JavaDocs to files + generated JavaDocs folder  (origin/Documentation, Documentation)
+
+54fd8fd|2024-08-30|Menu.java: added slider feedback info for advancedSetup()  (origin/GUI-Development, GUI-Development)
+
+9d8aed5|2024-08-28|Animal.java: added changeLives bool to aid life display. Set vars to hold game state options in Animal constructor. Updated the deaths to include decrement lives. Added a delay before NoMove can be deactivated. Updated flagSetting() implementation to account for dying with the flag and therefore needing to reset - this is also meant telling resetPosition() to trigger this flagSetting(). Finally made capturing a flag look pretty in setPosition(). getStop() updated to tell main if the game should be stopped. flagSetting() functionality to make it more dynamic and genuinely be used any time a flag needs to be set (not just when one is successfully grabbed). GameConfig.java: Updated setDifficulty() to set number of flags - was previously missing and defaulted amount of flags to grab. Level.java: refactored confusing var names. Updated setupLevel() parameters to take a GameConfig instance instead of a few game state options. Added proper comments to intitializeEnds(). Main.java: updated handle() method to check and trigger the display of lives as well as score. Tweaked setNUmber() to account for design changes. Wrote displayLives() function. arcadeStyle.css: wrote this css which includes button styles, a glow-label for front loading page, label styles etc... Menu.java: included a rootLayout variable that is set in the constructor as opposed to one of the Menu.java methods. Wrote showInit() method which represents the initial landing page. Added flashing label that tells you how to move to next page. Triggered Focus() method which allows for KeyEvent functionality. showMenu() which was previously the landing page now is the second page and contains the buttons to choose how to start the game. Misc: - Added Fonts - Added new Frogger Background and Menu screen.
+
+4c70e53|2024-08-26|Added GameConfig.java & Menu.java to modularise menu functionality and centralise game states
+
+7bec327|2024-08-25|Animal.java: patterned normal game mode to work given new endPoint (home). Patterned getStop() to end both games on condition Level.java: moved home instantiation outside loop to allow for both game modes  (origin/Level-Integration, Level-Integration)
+
+001bb4b|2024-08-20|Animal.java: added more ctf variables, removed separate homeInteraction function and made all ctfend interaction under one function, EndInteraction had to allow for home End. Bossed up handleCtfEndInteraction(). Wrote in flagSetting() function that checks and prints next flags. Added some getters. End.java: minor tweak Level.java: changed lists to ArrayLists so that Level.animal can share the actual arraylist of Ends. set animal.inter & animal.endsInCtfOrder. Added a dumb amount of prints to make certain of End cohesion between classes and functions. Revamped ctfEndsArray to produce only one of each number. Implemented the ArrayList version of the ends. Few more functions
+
+ba0046f|2024-08-14|Animal.java: added variable and function pertaining to HomeInteraction End.java: added getter for  function
+
+b95ddd6|2024-08-13|Animal.java: improved ctfEndInteraction function Level.java: added homeEndPoint intialisation within initializeEnds function
+
+9611fd8|2024-08-11|for push sake
+
+e2a9ab6|2024-08-08|Animal.java: replaced hardcoding with resetPosition() method and centered Frogger. Level.java: dynamically initialised number of ends and began allowing for dynamic End access to allow for game mode affecting Level conditions
+
+35fb982|2024-08-08|Started adding pretty bare bone CTF functionality to Animal.java, End.Java, Level.java & Main.java
+
+c660f75|2024-08-08|Fully converted base game setup into Level class method
+
+e961b20|2024-08-08|moved animal var assignment in Main.java
+
+9f735ed|2024-08-08|Created Level.java, edited speed var in Obstacle.java, Turtle.java & WetTurtle.java to double
+
+b3aae74|2024-08-06|Designed new background image, resized EndFrogger
+
+f104fec|2024-08-06|Main.java: added TODO list, shifted bg. Actor.java: cleaned up Added most recent ss of game to images folder
+
+0abe296|2024-08-06|replaced code block with function: resetPosition()
+
+5f45293|2024-08-06|Merge branch 'master' into 'main'
+
+a7e50d0|2024-08-06|Final Merge?
+
+a63bf72|2024-08-06|Deleted commented out code in Animal.java + updated file links in MyStage.java, WetTurtle.java & Turtle.java  (master)
+
+224bc5c|2024-08-06|Updated Animal.java to include WASD functionality
+
+c65dfc5|2024-08-06|modularised act by replacing code blocks with methods
+
+89f3df1|2024-08-06|added notes to Animal.java, Digit.java, End.java, Main & moved mp3 file to new folder
+
+14bec6b|2024-08-03|added functionality notes to Actor class
+
+6f94f58|2024-08-03|added all images v2
+
+2b12182|2024-08-03|added all images
+
+96a34d2|2024-08-03|changed image sources
+
+d178784|2024-07-30|Merge branch 'master' into 'main'
+
+b4fbe6c|2024-07-30|Initial commit  (origin/old-commit, old-commit)
+
+0735938|2024-07-30|Initial commit
