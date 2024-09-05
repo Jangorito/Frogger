@@ -91,7 +91,7 @@ public class Level {
 
         // ends setup
         initializeEnds(options.getNoEnds(), 60, 600);
-        animal.inter = getCtfEndsArray();
+        animal.inter = getEndsArray();
         animal.endsInCtfOrder = getInOrder();
 
 //        background.add(new End(13, 96)); // 13
@@ -130,27 +130,31 @@ public class Level {
      * @param windowWidth the width of the game window.
      */
     public void initializeEnds(int numberOfEnds, int endWidth, int windowWidth) {
+        // works out distance between number of ends
+        int remainingSpace = windowWidth - (numberOfEnds * endWidth);
+        int gap = remainingSpace / (numberOfEnds + 1);
 
-        // randomising the order of flags to capture TODO: surely this is only relevant if there are flags to capture??
-        Random random = new Random();
-        int[] endsInCtfOrderList = new int[numberOfEnds-1];
-        int count = 0;
-        while (count < endsInCtfOrderList.length){
-            int randomNum = random.nextInt(numberOfEnds);
-            if (!contains(endsInCtfOrderList, randomNum)){
-                endsInCtfOrderList[count] = randomNum;
-                count += 1;
+
+        if (animal.getCtfGameMode()){
+            // randomising the order of flags to capture TODO: surely this is only relevant if there are flags to capture??
+            Random random = new Random();
+            int[] endsInCtfOrderList = new int[numberOfEnds-1];
+            int count = 0;
+            while (count < endsInCtfOrderList.length){
+                int randomNum = random.nextInt(numberOfEnds);
+                if (!contains(endsInCtfOrderList, randomNum)){
+                    endsInCtfOrderList[count] = randomNum;
+                    count += 1;
+                }
             }
+            // giving the ordered list to var after computing ^
+            setInOrder(endsInCtfOrderList);
+
         }
-        // giving the ordered list to var after computing ^
-        setInOrder(endsInCtfOrderList);
 
         // ArrayList that will hold the end objects in instantiation order (not including home)
         this.endArrayList = new ArrayList<End>();
 
-        // works out distance between number of ends
-        int remainingSpace = windowWidth - (numberOfEnds * endWidth);
-        int gap = remainingSpace / (numberOfEnds + 1);
 
         // puts ends in array and sets CTF specific conditions
         for (int i = 0; i < numberOfEnds; i++) {
@@ -160,9 +164,11 @@ public class Level {
             this.endArrayList.add(new End(xPosition, 96, i, numberOfEnds));
 
             // setting the first flag if the game mode is CTF
-            if (i == endsInCtfOrderList[0] && animal.getCtfGameMode()){
-                this.endArrayList.get(i).setCtfActive(true);
-                this.endArrayList.get(i).setImage(new Image("file:src/main/resources/images/ctfEnd.png", 60, 60, true, true));
+            if (animal.getCtfGameMode()) {
+                if (i == getInOrder()[0]) {
+                    this.endArrayList.get(i).setCtfActive(true);
+                    this.endArrayList.get(i).setImage(new Image("file:src/main/resources/images/ctfEnd.png", 60, 60, true, true));
+                }
             }
 
             background.add(this.endArrayList.get(i));
@@ -173,7 +179,7 @@ public class Level {
         background.add(this.home);
     }
 
-    public ArrayList<End> getCtfEndsArray(){
+    public ArrayList<End> getEndsArray(){
         return endArrayList;
     }
     public void setInOrder(int[] array){

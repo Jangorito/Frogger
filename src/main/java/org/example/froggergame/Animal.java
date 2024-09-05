@@ -49,6 +49,7 @@ public class Animal extends Actor {
 	boolean ctfGameMode = false; // whether the ends are capture the flag ends [GAMEMODE!!!!]
 	boolean snagged = false;
 	int flagsToGrab = 0;
+	int noEnds = 0;
 	int[] endsInCtfOrder;
 	int stashed = 0;
 	int lives = 1;
@@ -84,6 +85,7 @@ public class Animal extends Actor {
         ctfGameMode = states.getGameMode() == 2;
 		flagsToGrab = states.getNoFlags();
 		lives = states.getLives();
+		noEnds = states.getNoEnds();
 	}
 	private void initializeInputHandlers() {
 		setOnKeyPressed(this::handleKeyPressed);
@@ -526,7 +528,7 @@ public class Animal extends Actor {
 			return stashed == flagsToGrab;
 		}
 		else if (!this.ctfGameMode){
-			return end == 5;
+			return end == noEnds;
 		}
 		return false;
 	}

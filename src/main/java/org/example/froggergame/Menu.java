@@ -132,6 +132,8 @@ public class Menu {
      */
     public void showMenu() {
         rootLayout.getChildren().clear();
+        // resetting game mode just in case back button is used
+        gameConfig.setGameMode(1);
 
         // SetUp Buttons & actions
         Button QuickSetUp = new Button("Quick Set Up");

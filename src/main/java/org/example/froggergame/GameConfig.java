@@ -94,7 +94,6 @@ public class GameConfig {
         this.gameMode = gameMode;
     }
     public void setDifficulty(int mode){
-        System.out.println("just set difficulty");
         // easy
         if (mode == 1){
             this.lives = 15;

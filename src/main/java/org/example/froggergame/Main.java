@@ -6,6 +6,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The main class for the Frogger game application. It extends {@link Application} and is responsible
@@ -62,7 +64,6 @@ public class Main extends Application {
 					displayLives(animal.getLives());
 				}
             	if (animal.getStop()) {
-            		System.out.println("STOPP:");
             		// background.stopMusic();
             		stop();
             		background.stop();
@@ -84,29 +85,50 @@ public class Main extends Application {
 		timer.stop();
 	}
 
+	// List to hold digit objects for the score
+	private List<Digit> scoreDigits = new ArrayList<>();
+	// List to hold digit objects for lives
+	private List<Digit> livesDigits = new ArrayList<>();
+
 	/**
 	 * Updates the display with the current score.
 	 *
 	 * @param n the score to display.
 	 */
-    public void setNumber(int n) {
-    	int shift = 0;
+	public void setNumber(int n) {
+		// Remove previous digits from the background and clear scoreDigits list
+		for (Digit digit : scoreDigits) {
+			background.remove(digit);
+		}
+		scoreDigits.clear();  // Clear the list for the next digits
+
+		System.out.println("new score = " + n);
+		int shift = 0;
 		int gap = 0;
-		if (n < 10){
+
+		// Determine the gap based on the number of digits
+		if (n < 10) {
 			gap = 0;
-		} else if (n < 100){
+		} else if (n < 100) {
 			gap = 30;
-		} else{
+		} else if (n < 1000) {
 			gap = 60;
 		}
-    	while (n > 0) {
-		  int d = n / 10;
-		  int k = n - d * 10;
-		  n = d;
-		  background.add(new Digit(k, 30, 412+gap - shift, 14));
-		  shift+=30;
+		else {
+			gap = 90;
 		}
-    }
+
+		// Add new digits and store references in the scoreDigits list
+		while (n > 0) {
+			int d = n / 10;
+			int k = n - d * 10;
+			n = d;
+			Digit digit = new Digit(k, 30, 412 + gap - shift, 14);
+			background.add(digit);
+			scoreDigits.add(digit);  // Add the digit to scoreDigits list
+			shift += 30;
+		}
+	}
 
 	/**
 	 * Updates the display with the current number of lives.
@@ -114,13 +136,23 @@ public class Main extends Application {
 	 * @param n the number of lives to display.
 	 */
 	public void displayLives(int n) {
+		// Remove previous digits from the background and clear livesDigits list
+		for (Digit digit : livesDigits) {
+			background.remove(digit);
+		}
+		livesDigits.clear();  // Clear the list for the next digits
+
 		int shift = 0;
+
+		// Add new digits and store references in the livesDigits list
 		while (n > 0) {
 			int d = n / 10;
 			int k = n - d * 10;
 			n = d;
-			background.add(new Digit(k, 30, 412+30 - shift, 43));
-			shift+=30;
+			Digit digit = new Digit(k, 30, 412 + 30 - shift, 43);
+			background.add(digit);
+			livesDigits.add(digit);  // Add the digit to livesDigits list
+			shift += 30;
 		}
 	}
 
