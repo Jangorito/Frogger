@@ -87,7 +87,7 @@ Main.java: dynamic score display revamped to allow transition between amount of 
     - **Implementation Details:** print statements in around functions to with End initialisation
 
   - **Subsequent _Refactoring_**
-    1. @2cd4265e
+    1. @[2cd4265e](https://projects.cs.nott.ac.uk/psyea6/comp2013_cw_psyea6/-/commit/2cd4265e4ff3c7d6b26c1afb029c48219322b17c)
     - **Desc:** `initializeEnds()` has to capture both game modes' functionality
     - **Rationale:** this method is called regardless of the game mode
     - **Implementation Details:** Refactored method to do specific ctf only instructions + refactored `getCtfEndsArray` -> `getEndsArray`
@@ -166,6 +166,18 @@ Main.java: dynamic score display revamped to allow transition between amount of 
         - `Menu.java`: Restructured menu functionality, added `showInit()` for the landing page, implemented flashing labels and focus management for key events, and updated `showMenu()` to manage game start options.
         - Miscellaneous: Added new fonts and backgrounds for the Frogger game and menu screens.
     
+#### CTF Evolution [for demo]
+
+1. [Class creation + collisions + `homeInteraction()` Evolution](src/main/resources/images/homeInteraction Evo.png)
+   - var:[`homeInteraction()`](http://localhost:63342/Frogger%20Game/Javadocs/org.example.froggergame/org/example/froggergame/Animal.html#act(long))
+
+
+2. [The `initializeEnds()` Evolution](src/main/resources/images/initializeEnds()Evo.png)
+   - var:[`initializeEnds()`](http://localhost:63342/Frogger%20Game/Javadocs/org.example.froggergame/org/example/froggergame/Level.html#initializeEnds(int,int,int))
+
+
+3. [The `flagSetting()` Evolution](src/main/resources/images/flagSetting()Evo.png)
+   - var:[`flagSetting())`](http://localhost:63342/Frogger%20Game/Javadocs/org.example.froggergame/org/example/froggergame/Animal.html#flagSetting())
 
 ### 5. Menu
 
