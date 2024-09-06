@@ -94,7 +94,7 @@ Main.java: dynamic score display revamped to allow transition between amount of 
 
 ### 4. Capture the Flag + Classic Frogger game modes
 
-- **Initial Addition @35fb9825**
+- **Initial Addition @[35fb9825](https://projects.cs.nott.ac.uk/psyea6/comp2013_cw_psyea6/-/commit/35fb982585b033533c6b744991a470dfca16b7a8)**
   - **Desc:** Started adding bare bone CTF functionality to `Animal.java`, `End.Java`, `Level.java` & `Main.java`
   - **Rationale:** A Capture the Flag game mode is very cool!
   - **Implementation Details** By Class:
@@ -104,48 +104,48 @@ Main.java: dynamic score display revamped to allow transition between amount of 
 
 
 - **Further _Additions_**
-    1.  @b95ddd6
+    1. @[b95ddd6](https://projects.cs.nott.ac.uk/psyea6/comp2013_cw_psyea6/-/commit/b95ddd629625d17a33366cb697ca6b6ec9449e07)
     - **Desc:** Expanding ctf functionality
     - **Rationale:** Allowing for flags to be assigned/ordered at random
     - **Implementation Details:** Populated array with length of number of flags and populated randomly within `initializeEnds()` function
-    2. @ba0046f
+    2. @[ba0046f](https://projects.cs.nott.ac.uk/psyea6/comp2013_cw_psyea6/-/commit/ba0046f7dc48d76f3e17a7e74eb8a10e3c22e592)
     - **Desc:** Home Endpoint interaction
     - **Rationale:** Capture the Flag game mode needs a place to stash flags 
     - **Implementation Details:** Wrote a function to handle home endpoint interaction, which was later deleted in subsequent refactoring.
-    3. @001bb4b
+    3. @[001bb4b](https://projects.cs.nott.ac.uk/psyea6/comp2013_cw_psyea6/-/commit/001bb4bab643dad2a68da9cdb31e18a7278b5eda)
     - **Desc:** Enhanced CTF interactions and consolidated CTF endpoint functionality.
     - **Rationale:** Streamlined flag interactions and improved game logic consistency.
     - **Implementation Details** by Class:
-      - `Animal.java`: AAdded variables for CTF and a flagSetting() function to print the next flags. Included additional getters.
-    4. @7bec327
+      - `Animal.java`: Added variables for CTF and a `flagSetting()` function to print the next flags. Included additional getters.
+    4. @[7bec327](https://projects.cs.nott.ac.uk/psyea6/comp2013_cw_psyea6/-/commit/7bec327d932f7500e587598d23111a88d67b0db6)
     - **Desc:** Adapted game modes to work with new endPoint (home).
     - **Rationale:** Ensure both normal game mode and CTF mode function correctly with the new game endpoint.
     - **Implementation Details** 
       - `Animal.java`: Adjusted normal game mode logic to incorporate the new home endpoint.
-    5. @9d8aed5
+    5. @[9d8aed5](https://projects.cs.nott.ac.uk/psyea6/comp2013_cw_psyea6/-/commit/9d8aed52d88bd15da0c0244d21f38452996c42ad)
     - **Desc:** Added dynamic flag setting and improved game state handling.
     - **Rationale:** Enhance user experience by dynamically updating flags and game states.
     - **Implementation Details**
         - `Animal.java`: Added `changeLives` boolean to help display life status, modified variables to hold game state options, updated death handling to include decrementing lives, and added a delay before disabling NoMove. Refined `flagSetting()` to handle dying with a flag and needing to reset.
         - `GameConfig.java`: Updated `setDifficulty()` to properly set the number of flags.
-    6. @2cd4265e
+    6. @[2cd4265e](https://projects.cs.nott.ac.uk/psyea6/comp2013_cw_psyea6/-/commit/2cd4265e4ff3c7d6b26c1afb029c48219322b17c)
     - **Desc:** Game ends on correct lives
     - **Rationale:** The game previously checked `end` var against hardcoded integer '5' 
     - **Implementation Details** created variable `noEnds` and fetched correct number of ends from GameConfig
 
 - **Subsequent _Refactoring_**
-    1. @001bb4b
+    1. @[001bb4b](https://projects.cs.nott.ac.uk/psyea6/comp2013_cw_psyea6/-/commit/001bb4bab643dad2a68da9cdb31e18a7278b5eda)
     - **Desc:** Consolidated CTF endpoint functionality.
     - **Rationale:** Improve code maintainability and functionality by centralizing and refining key interactions.
     - **Implementation Details:** 
         - `Animal.java`: Consolidated the separate home interaction function into a comprehensive `EndInteraction()` method.
         - `Level.java`: Converted lists to ArrayLists to share the actual list of Ends between Level and Animal. Revamped the `ctfEndsArray` to ensure unique numbers for each flag.
-    2. @7bec327
+    2. @[7bec327](https://projects.cs.nott.ac.uk/psyea6/comp2013_cw_psyea6/-/commit/7bec327d932f7500e587598d23111a88d67b0db6)
     - **Desc:** Adjusted Level instantiation for home endpoint.
     - **Rationale:** Ensure compatibility across game modes by refining the initialization process.
     - **Implementation Details:**
         - `Level.java`: Moved home instantiation outside the loop to support both normal and CTF game modes.
-    3. @9d8aed5
+    3. @[9d8aed5](https://projects.cs.nott.ac.uk/psyea6/comp2013_cw_psyea6/-/commit/9d8aed52d88bd15da0c0244d21f38452996c42ad)
     - **Desc:** Refactored code for better clarity and functionality.
     - **Rationale:** Simplify code and improve maintainability.
     - **Implementation Details:**
