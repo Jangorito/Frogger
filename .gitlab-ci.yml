@@ -1,0 +1,11 @@
+stages:
+  - deploy
+
+deploy_docs:
+  stage: deploy
+  script:
+    - mkdir -p public
+    - cp -R Javadocs/* public/
+  artifacts:
+    paths:
+      - public
