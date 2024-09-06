@@ -47,10 +47,19 @@ This is an EmmanSTUDIOs production of Konami's classic Frogger game. It involves
     - **Implementation Details:** Added file to resource folder and changed src link
 
 
-  - **Further _Refactoring_ @a63bf72 + @96a34d2**
-      - **Desc:** moving files and updating location
-      - **Rationale:** the location of the files was changed for consistency 
-      - **Implementation Details:** updated file links in `MyStage.java`, `WetTurtle.java` & `Turtle.java`
+  - **Further _Refactoring_**
+    1.  @a63bf72 + @96a34d2
+    - **Desc:** moving files and updating location
+    - **Rationale:** the location of the files was changed for consistency 
+    - **Implementation Details:** updated file links in `MyStage.java`, `WetTurtle.java` & `Turtle.java`
+    2.  2cd4265e
+    - **Desc:** dynamic score display revamped to allow transition between amount of digits
+    - **Rationale:** previously left digits on screen erroneously 
+    - **Implementation Details:** added ArrayLists: `scoreDigits` & `livesDigits` and cleared them everytime `setNumber()` & `displayLives`
+
+
+2cd4265e
+Main.java: dynamic score display revamped to allow transition between amount of digits
 
 ### 3. `Level.java`
 
@@ -71,12 +80,18 @@ This is an EmmanSTUDIOs production of Konami's classic Frogger game. It involves
     - **Implementation Details:** wrote method `initializeEnds()`
   
 
-  - **Subsequent _Maintenance_**
+  - **Further _Maintenance_**
     1.  @001bb4b
     - **Desc:** Added print statements around End functionality 
     - **Rationale:** As a means to test
     - **Implementation Details:** print statements in around functions to with End initialisation
-  
+
+  - **Subsequent _Refactoring_**
+    1. @2cd4265e
+    - **Desc:** `initializeEnds()` has to capture both game modes' functionality
+    - **Rationale:** this method is called regardless of the game mode
+    - **Implementation Details:** Refactored method to do specific ctf only instructions + refactored `getCtfEndsArray` -> `getEndsArray`
+
 ### 4. Capture the Flag + Classic Frogger game modes
 
 - **Initial Addition @35fb9825**
@@ -113,7 +128,10 @@ This is an EmmanSTUDIOs production of Konami's classic Frogger game. It involves
     - **Implementation Details**
         - `Animal.java`: Added `changeLives` boolean to help display life status, modified variables to hold game state options, updated death handling to include decrementing lives, and added a delay before disabling NoMove. Refined `flagSetting()` to handle dying with a flag and needing to reset.
         - `GameConfig.java`: Updated `setDifficulty()` to properly set the number of flags.
-
+    6. @2cd4265e
+    - **Desc:** Game ends on correct lives
+    - **Rationale:** The game previously checked `end` var against hardcoded integer '5' 
+    - **Implementation Details** created variable `noEnds` and fetched correct number of ends from GameConfig
 
 - **Subsequent _Refactoring_**
     1. @001bb4b
@@ -140,14 +158,14 @@ This is an EmmanSTUDIOs production of Konami's classic Frogger game. It involves
     - **Desc:** Deleted function for home endpoint interaction.
     - **Rationale:** Removed obsolete or redundant code after subsequent refactoring.
     - **Implementation Details:** The function written in the `Animal.java` file for home endpoint interaction was deleted in a later commit after being refactored into a more comprehensive method.
-    1. @9d8aed5
+    2. @9d8aed5
     - **Desc:** Enhanced user interface and experience.
     - **Rationale:** Improve the visual appeal and usability of the game.
     - **Implementation Details:**
         - `arcadeStyle.css`: Introduced new CSS styles, including button designs, glow effects for labels, and other UI enhancements.
         - `Menu.java`: Restructured menu functionality, added `showInit()` for the landing page, implemented flashing labels and focus management for key events, and updated `showMenu()` to manage game start options.
         - Miscellaneous: Added new fonts and backgrounds for the Frogger game and menu screens.
-
+    
 
 ### 5. Menu
 
@@ -168,3 +186,15 @@ This is an EmmanSTUDIOs production of Konami's classic Frogger game. It involves
     - **Desc:** Added slider feedback for advanced setup in the menu.
     - **Rationale:** Provide visual feedback to users during advanced configuration to enhance usability.
     - **Implementation Details:**  Implemented slider feedback functionality within the `advancedSetup()` method, giving users immediate feedback on their choices to improve interaction clarity and satisfaction.
+    3. @2cd4265e
+    - **Desc:** The back button needs to trigger a reset of game modes
+    - **Rationale:** The default option is Standard so if CTF option was pressed followed by back button then Quick Setup followed by Start Game, the system would CTF selected even though the option displayed Standard 
+    - **Implementation Details:** `showMenu()` starts with a `gameConfig.setGameMode(1)`
+
+
+### 6. GameConfig
+
+- **Initial _Addition_ @4c70e53**
+    - **Desc:** Created Class
+    - **Rationale:** Centralised class for game configurations and presets
+    - **Implementation Details:** Made class with methods getters and setters for game states 
