@@ -131,9 +131,17 @@ public class Menu {
      * Displays the main menu with options for quick setup and advanced setup.
      */
     public void showMenu() {
+        // TODO: Turn this into a gridpane layout
         rootLayout.getChildren().clear();
         // resetting game mode just in case back button is used
         gameConfig.setGameMode(1);
+
+        // Create GridPane layout for Quick Setup
+        GridPane gridPane = new GridPane();
+        gridPane.setPadding(new Insets(10));
+        gridPane.setVgap(10);
+        gridPane.setHgap(10);
+        gridPane.setAlignment(Pos.CENTER);
 
         // SetUp Buttons & actions
         Button QuickSetUp = new Button("Quick Set Up");
@@ -142,7 +150,16 @@ public class Menu {
         advancedSetUp.setOnAction(event -> advancedSetUp());
         QuickSetUp.setPrefWidth(316.0);
 
-        rootLayout.getChildren().addAll(QuickSetUp, advancedSetUp);
+        // TODO: Adding a left and right button to toggle between different frogger images
+        Button leftScroll = new Button("<");
+        Button rightScroll = new Button(">");
+
+        gridPane.add(QuickSetUp,1, 0);
+        gridPane.add(advancedSetUp,1, 1);
+        gridPane.add(leftScroll, 0, 2);
+        gridPane.add(rightScroll, 3, 2);
+        rootLayout.getChildren().add(gridPane);
+        // rootLayout.getChildren().addAll(QuickSetUp, advancedSetUp, leftScroll, rightScroll);
 
     }
 
