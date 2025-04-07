@@ -37,6 +37,7 @@ public class Menu {
     private VBox rootLayout;  // Root layout to maintain the same screen
     Font font;
     boolean init;
+    MenuAnimal menuAnimal;
 
     /**
      * Constructs a new Menu instance.
@@ -150,16 +151,41 @@ public class Menu {
         advancedSetUp.setOnAction(event -> advancedSetUp());
         QuickSetUp.setPrefWidth(316.0);
 
-        // TODO: Adding a left and right button to toggle between different frogger images
+        // TODO/: Adding a left and right button to toggle between different frogger images
         Button leftScroll = new Button("<");
         Button rightScroll = new Button(">");
 
         gridPane.add(QuickSetUp,1, 0);
         gridPane.add(advancedSetUp,1, 1);
+
+        // TODO/: Make a pane for the final row that will hold the Frogger but allow for x & y freedom
+        Pane spritePane = new Pane();
+        spritePane.setPrefSize(100, 100);
+
+
+        // TODO/: Create MenuAnimal and fling it in pane
+        menuAnimal = new MenuAnimal();
+
+        // TODO: clean up
+
+        // setting the buttons to trigger animations
+        leftScroll.setOnAction(event -> menuAnimal.leftAnimation(spritePane));
+        rightScroll.setOnAction(event -> menuAnimal.rightAnimation(spritePane));
+
+        // matching the height and width of the animal sprite to the arrows
+        menuAnimal.fitHeightProperty().bind(leftScroll.heightProperty());
+        menuAnimal.fitWidthProperty().bind(leftScroll.heightProperty());
+
+        // centering the original sprite in the gridPane
+        // TODO: modularise this process and possibly call it as a method from MenuAnimal as we'll need this functionality multiple times
+        menuAnimal.layoutYProperty().bind(spritePane.heightProperty().subtract(menuAnimal.fitHeightProperty()).divide(2));
+        menuAnimal.setX(130);
+        spritePane.getChildren().add(menuAnimal);
+
         gridPane.add(leftScroll, 0, 2);
-        gridPane.add(rightScroll, 3, 2);
+        gridPane.add(spritePane, 1, 2);
+        gridPane.add(rightScroll, 2, 2);
         rootLayout.getChildren().add(gridPane);
-        // rootLayout.getChildren().addAll(QuickSetUp, advancedSetUp, leftScroll, rightScroll);
 
     }
 
