@@ -7,6 +7,8 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
+import java.util.ArrayList;
+
 public class MenuAnimal extends Actor{
 
     Image up;
@@ -23,7 +25,7 @@ public class MenuAnimal extends Actor{
     //  - use the 'move' function to code a function that animates frogger
     //    to run between arrows and disappear
 
-    public MenuAnimal(){
+    public MenuAnimal(int spriteNo){
         up = new Image("file:src/main/resources/images/froggerUp.png", 40, 40, true, true);
         left = new Image("file:src/main/resources/images/froggerLeft.png", 40, 40, true, true);
         right = new Image("file:src/main/resources/images/froggerRight.png", 40, 40, true, true);
@@ -38,6 +40,7 @@ public class MenuAnimal extends Actor{
     public void act(long now) {
 
     }
+
 
     public void leftAnimation(Pane parentPane) {
         // setting the:
@@ -62,6 +65,7 @@ public class MenuAnimal extends Actor{
             //  ALSO: we need to hop on pc and make different sprite images
             if (currentX - hopDistance <= minX) {
                 setLayoutX(minX); // snap to start
+                parentPane.getChildren().remove(this); // kill object
                 timeline.stop();
             } else {
                 move(-hopDistance, 0);
@@ -87,6 +91,7 @@ public class MenuAnimal extends Actor{
             System.out.print(currentX);
             if (currentX + hopDistance >= maxX) {
                 setLayoutX(maxX); // snap to end
+                parentPane.getChildren().remove(this); // kill object
                 timeline.stop();
             } else {
                 move(hopDistance, 0);
@@ -97,6 +102,10 @@ public class MenuAnimal extends Actor{
 
         timeline.getKeyFrames().add(keyFrame);
         timeline.play();
+    }
+
+    public void positions(Menu menu){
+        int spriteNo = menu.getScrollVal();
     }
 
 }

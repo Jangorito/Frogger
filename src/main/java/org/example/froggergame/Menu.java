@@ -24,6 +24,7 @@ import javafx.scene.layout.*;
 import javafx.scene.image.ImageView;
 import java.io.File;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 /**
  * The Menu class is responsible for displaying and handling the user interface
@@ -37,7 +38,10 @@ public class Menu {
     private VBox rootLayout;  // Root layout to maintain the same screen
     Font font;
     boolean init;
-    MenuAnimal menuAnimal;
+    // MenuAnimal sprites[scrollVal];
+    public ArrayList<MenuAnimal> sprites;
+    Integer scrollVal; // integer holding which sprite is selected based on button clicks
+    Integer noCharacters; // dynamic number of available Frogger Skins
 
     /**
      * Constructs a new Menu instance.
@@ -55,7 +59,11 @@ public class Menu {
         InputStream fontStream = getClass().getResourceAsStream("/RetrovilleNC.ttf");
         this.font = Font.loadFont(fontStream, 16);
         this.init = true;
+        scrollVal = 0;
+        noCharacters = 5;
+        sprites = new ArrayList<>();
         initializeInputHandlers();
+        loadSprites();
 
     }
 
@@ -128,10 +136,18 @@ public class Menu {
 
     }
 
+    private void loadSprites() {
+        sprites.clear(); // Prevent duplicates
+        for (int i = 0; i < noCharacters; i++) {
+            sprites.add(new MenuAnimal(i));
+        }
+    }
+
     /**
      * Displays the main menu with options for quick setup and advanced setup.
      */
     public void showMenu() {
+        System.out.print(scrollVal);
         // TODO: Turn this into a gridpane layout
         rootLayout.getChildren().clear();
         // resetting game mode just in case back button is used
@@ -164,23 +180,43 @@ public class Menu {
 
 
         // TODO/: Create MenuAnimal and fling it in pane
-        menuAnimal = new MenuAnimal();
+
+        // TODO/^: Create the list of animals here in a list
+
 
         // TODO: clean up
 
+
         // setting the buttons to trigger animations
-        leftScroll.setOnAction(event -> menuAnimal.leftAnimation(spritePane));
-        rightScroll.setOnAction(event -> menuAnimal.rightAnimation(spritePane));
+        // TODO: might be worth just triggering a function in the MenuAnimals, sending it a bunch of values and
+        //  using the act function to dynamically update everthing. Considerations:
+        //   - gridPane is controlled from here, what does that mean?
+        //   - would eliminate need for a direct call to leftAnimation and instead trigger a funcion that repositions
+        //   ALL sprites to reposition, also meaning it works off the rip and don't have to hardcode initial positions
+        leftScroll.setOnAction(event -> {
+            if (scrollVal < 0){ scrollVal = noCharacters - 1;} // reset scroll count
+
+            sprites.get(scrollVal).leftAnimation(spritePane);
+            scrollVal -= 1;
+
+        });
+        rightScroll.setOnAction(event -> {
+            if (scrollVal.equals(noCharacters)){scrollVal = 0;} // reset scroll count
+
+            sprites.get(scrollVal).rightAnimation(spritePane);
+            scrollVal += 1;
+        });
 
         // matching the height and width of the animal sprite to the arrows
-        menuAnimal.fitHeightProperty().bind(leftScroll.heightProperty());
-        menuAnimal.fitWidthProperty().bind(leftScroll.heightProperty());
+        System.out.print(scrollVal);
+        sprites.get(scrollVal).fitHeightProperty().bind(leftScroll.heightProperty());
+        sprites.get(scrollVal).fitWidthProperty().bind(leftScroll.heightProperty());
 
         // centering the original sprite in the gridPane
         // TODO: modularise this process and possibly call it as a method from MenuAnimal as we'll need this functionality multiple times
-        menuAnimal.layoutYProperty().bind(spritePane.heightProperty().subtract(menuAnimal.fitHeightProperty()).divide(2));
-        menuAnimal.setX(130);
-        spritePane.getChildren().add(menuAnimal);
+        sprites.get(scrollVal).layoutYProperty().bind(spritePane.heightProperty().subtract(sprites.get(scrollVal).fitHeightProperty()).divide(2));
+        sprites.get(scrollVal).setX(130);
+        spritePane.getChildren().add(sprites.get(scrollVal));
 
         gridPane.add(leftScroll, 0, 2);
         gridPane.add(spritePane, 1, 2);
@@ -397,4 +433,6 @@ public class Menu {
         // Add GridPane to rootLayout
         rootLayout.getChildren().add(gridPane);
     }
+
+    public int getScrollVal(){return scrollVal;}
 }

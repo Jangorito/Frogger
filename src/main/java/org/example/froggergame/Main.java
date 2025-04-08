@@ -30,8 +30,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		Menu menu = new Menu(primaryStage,this);
-		menu.showInit();
-	}
+		menu.showInit();}
 
 	/**
 	 * Starts the game with the selected level and difficulty settings.
