@@ -1,5 +1,6 @@
 package org.example.froggergame;
 
+import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -140,8 +141,52 @@ public class Menu {
         sprites.clear(); // Prevent duplicates
         for (int i = 0; i < noCharacters; i++) {
             sprites.add(new MenuAnimal(i));
+            sprites.get(i).setFitHeight(55.2);
+            sprites.get(i).setFitWidth(55.2);
         }
     }
+
+    private void spawnSprites(Pane arrowsPane, Pane spriteHome, Button leftScroll) {
+        double paneWidth = spriteHome.getPrefWidth();
+        double paneHeight = spriteHome.getPrefHeight();
+        int numSprites = noCharacters - 1; // skip the selected one
+
+        // Estimate width/height based on button (match leftScroll's height)
+        double spriteSize = 55.2; // button hasn't rendered yet? We'll bind later.
+
+        double spacing = (paneWidth - (spriteSize * numSprites)) / (numSprites + 1);
+        System.out.println(STR."paneWidth = \{paneWidth} spriteSize = \{spriteSize} spacing = \{spacing}");
+        double startX = spacing;
+
+        for (int i = 0; i < numSprites; i++) {
+            if (i == 0) {
+                sprites.getFirst().layoutYProperty().bind(
+                        spriteHome.heightProperty().subtract(sprites.getFirst().fitHeightProperty()).divide(2)
+                ); // center vertically
+                sprites.getFirst().layoutXProperty().bind(
+                        spriteHome.widthProperty().subtract(sprites.getFirst().fitWidthProperty()).divide(2)
+                ); // center horizontally
+            }
+
+                MenuAnimal sprite = sprites.get(i + 1); // skip selected
+
+            System.out.println(startX);
+            // Bind width & height to button height
+            // sprite.fitHeightProperty().bind(leftScroll.heightProperty());
+            // sprite.fitWidthProperty().bind(leftScroll.heightProperty());
+
+            sprite.setX(startX);
+            sprite.layoutYProperty().bind(
+                    spriteHome.heightProperty().subtract(sprite.fitHeightProperty()).divide(2)
+            ); // center vertically
+
+            spriteHome.getChildren().add(sprite);
+            startX += spacing + spriteSize;
+
+        }
+    }
+
+
 
     /**
      * Displays the main menu with options for quick setup and advanced setup.
@@ -176,8 +221,10 @@ public class Menu {
 
         // TODO/: Make a pane for the final row that will hold the Frogger but allow for x & y freedom
         Pane spritePane = new Pane();
-        spritePane.setPrefSize(100, 100);
+        spritePane.setPrefSize(316, 100);
 
+        Pane spriteHome = new Pane();
+        spriteHome.setPrefSize(316, 100);
 
         // TODO/: Create MenuAnimal and fling it in pane
 
@@ -207,20 +254,35 @@ public class Menu {
             scrollVal += 1;
         });
 
-        // matching the height and width of the animal sprite to the arrows
-        System.out.print(scrollVal);
-        sprites.get(scrollVal).fitHeightProperty().bind(leftScroll.heightProperty());
-        sprites.get(scrollVal).fitWidthProperty().bind(leftScroll.heightProperty());
+//        // matching the height and width of the animal sprite to the arrows
+//        System.out.print(scrollVal);
+//        sprites.get(scrollVal).fitHeightProperty().bind(leftScroll.heightProperty());
+//        sprites.get(scrollVal).fitWidthProperty().bind(leftScroll.heightProperty());
+//
+//
+//        // centering the original sprite in the gridPane
+//        // TODO: modularise this process and possibly call it as a method from MenuAnimal as we'll need this functionality multiple times
+//        sprites.get(scrollVal).layoutYProperty().bind(spritePane.heightProperty().subtract(sprites.get(scrollVal).fitHeightProperty()).divide(2));
+//        System.out.println(STR."Y val: \{sprites.getFirst().getLayoutY()}");
+//
+//        sprites.get(scrollVal).setX(130);
 
-        // centering the original sprite in the gridPane
-        // TODO: modularise this process and possibly call it as a method from MenuAnimal as we'll need this functionality multiple times
-        sprites.get(scrollVal).layoutYProperty().bind(spritePane.heightProperty().subtract(sprites.get(scrollVal).fitHeightProperty()).divide(2));
-        sprites.get(scrollVal).setX(130);
-        spritePane.getChildren().add(sprites.get(scrollVal));
+//        spawnSprites(spritePane, spriteHome, leftScroll);
+        Platform.runLater(() -> {
+            System.out.println("runLater vals:");
+            System.out.println(leftScroll.getHeight());
+            System.out.println(QuickSetUp.getWidth());
+            System.out.println(sprites.getFirst().getHeight());
+            spawnSprites(spritePane, spriteHome, leftScroll);
+        });
+
+         spritePane.getChildren().add(sprites.get(scrollVal));
 
         gridPane.add(leftScroll, 0, 2);
         gridPane.add(spritePane, 1, 2);
         gridPane.add(rightScroll, 2, 2);
+        gridPane.add(spriteHome, 1, 3);
+
         rootLayout.getChildren().add(gridPane);
 
     }

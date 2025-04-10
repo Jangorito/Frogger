@@ -106,6 +106,7 @@ public class MenuAnimal extends Actor{
 
     public void positions(Menu menu){
         int spriteNo = menu.getScrollVal();
+
     }
 
 }
