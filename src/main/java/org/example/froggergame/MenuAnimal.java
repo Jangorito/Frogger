@@ -17,6 +17,7 @@ public class MenuAnimal extends Actor{
     Image leftUp;
     Image rightUp;
     boolean secondFrame;
+    Integer number;
 
     double movement = 10; // TODO: work out x distance for animation
 
@@ -33,7 +34,7 @@ public class MenuAnimal extends Actor{
         rightUp = new Image("file:src/main/resources/images/froggerRightJump.png", 40, 40, true, true);
 
         setImage(up);
-        // TODO: work out the x & y that places the default frogger in between the arrows
+        number = spriteNo;
 
     }
     @Override
@@ -65,7 +66,7 @@ public class MenuAnimal extends Actor{
             //  ALSO: we need to hop on pc and make different sprite images
             if (currentX - hopDistance <= minX) {
                 setLayoutX(minX); // snap to start
-                parentPane.getChildren().remove(this); // kill object
+                // parentPane.getChildren().remove(this); // kill object
                 timeline.stop();
             } else {
                 move(-hopDistance, 0);
@@ -90,8 +91,8 @@ public class MenuAnimal extends Actor{
             double currentX = getBoundsInParent().getMinX();
             System.out.print(currentX);
             if (currentX + hopDistance >= maxX) {
-                setLayoutX(maxX); // snap to end
-                parentPane.getChildren().remove(this); // kill object
+                // setLayoutX(maxX); // snap to end
+                // parentPane.getChildren().remove(this); // kill object
                 timeline.stop();
             } else {
                 move(hopDistance, 0);
@@ -104,9 +105,65 @@ public class MenuAnimal extends Actor{
         timeline.play();
     }
 
-    public void positions(Menu menu){
+    public void rightTurn(){
+        setImage(right);
+    }
+    public void leftTurn(){
+        setImage(left);
+    }
+    public void faceUp(){
+        setImage(up);
+    }
+
+    public void btmRowMove(double distance){
+        System.out.println(STR."\nbtmRowMove of \{getNo()}, distance = \{distance}");
+        double hopDistance = distance/2;
+
+        Duration hopDuration = Duration.millis(200);
+
+        Timeline timeline = new Timeline();
+        timeline.setCycleCount(Animation.INDEFINITE);
+
+        KeyFrame keyFrame = new KeyFrame(hopDuration, e -> {
+            double currentX = getBoundsInParent().getMinX();
+            if (distance > 0){
+                move(hopDistance, 0);
+                rightTurn();
+                move(hopDistance, 0);
+                faceUp();
+
+            } else {
+                move(hopDistance, 0);
+                leftTurn();
+                move(hopDistance, 0);
+                faceUp();
+
+            }
+            System.out.println(currentX);
+            timeline.stop();
+        });
+
+        timeline.getKeyFrames().add(keyFrame);
+        timeline.play();
+
+    }
+    // TODO:
+    //  - call right & left animations from this?
+    //  +
+    //  - each arrow triggers the animals in the lower pane to:
+    //      - turn the opposite way
+    //      - move down along and pane
+    //      - have the one on the end of the way their facing travel up to the upper pane
+    //      - turn back to face upwards
+    //      - the animal in the upper pane should also join the empty gap left and one of the
+    public void positions(Menu menu, Integer direction){
+
         int spriteNo = menu.getScrollVal();
 
+    }
+
+    public int getNo(){
+        return number;
     }
 
 }

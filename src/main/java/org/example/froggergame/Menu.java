@@ -26,6 +26,7 @@ import javafx.scene.image.ImageView;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * The Menu class is responsible for displaying and handling the user interface
@@ -43,6 +44,7 @@ public class Menu {
     public ArrayList<MenuAnimal> sprites;
     Integer scrollVal; // integer holding which sprite is selected based on button clicks
     Integer noCharacters; // dynamic number of available Frogger Skins
+    double[] positions;
 
     /**
      * Constructs a new Menu instance.
@@ -63,6 +65,7 @@ public class Menu {
         scrollVal = 0;
         noCharacters = 5;
         sprites = new ArrayList<>();
+        positions = new double[noCharacters-1];
         initializeInputHandlers();
         loadSprites();
 
@@ -155,10 +158,14 @@ public class Menu {
         double spriteSize = 55.2; // button hasn't rendered yet? We'll bind later.
 
         double spacing = (paneWidth - (spriteSize * numSprites)) / (numSprites + 1);
+        spacing = Math.round(spacing);
+
         System.out.println(STR."paneWidth = \{paneWidth} spriteSize = \{spriteSize} spacing = \{spacing}");
         double startX = spacing;
 
+
         for (int i = 0; i < numSprites; i++) {
+            System.out.println(STR."\n \{i}:");
             if (i == 0) {
                 sprites.getFirst().layoutYProperty().bind(
                         spriteHome.heightProperty().subtract(sprites.getFirst().fitHeightProperty()).divide(2)
@@ -168,22 +175,25 @@ public class Menu {
                 ); // center horizontally
             }
 
-                MenuAnimal sprite = sprites.get(i + 1); // skip selected
+            MenuAnimal sprite = sprites.get(i + 1); // skip selected
 
             System.out.println(startX);
+            positions[i] = startX;
+
             // Bind width & height to button height
             // sprite.fitHeightProperty().bind(leftScroll.heightProperty());
             // sprite.fitWidthProperty().bind(leftScroll.heightProperty());
 
-            sprite.setX(startX);
+            sprite.setX(Math.round(startX));
             sprite.layoutYProperty().bind(
                     spriteHome.heightProperty().subtract(sprite.fitHeightProperty()).divide(2)
             ); // center vertically
 
             spriteHome.getChildren().add(sprite);
             startX += spacing + spriteSize;
-
+            startX = Math.round(startX);
         }
+        System.out.println(Arrays.toString(positions));
     }
 
 
@@ -242,7 +252,6 @@ public class Menu {
         //   ALL sprites to reposition, also meaning it works off the rip and don't have to hardcode initial positions
         leftScroll.setOnAction(event -> {
             if (scrollVal < 0){ scrollVal = noCharacters - 1;} // reset scroll count
-
             sprites.get(scrollVal).leftAnimation(spritePane);
             scrollVal -= 1;
 
@@ -251,6 +260,13 @@ public class Menu {
             if (scrollVal.equals(noCharacters)){scrollVal = 0;} // reset scroll count
 
             sprites.get(scrollVal).rightAnimation(spritePane);
+            for (int i = 0; i < noCharacters - 2; i++){
+                System.out.println(sprites.get(i + 1).getNo());
+                double[] pos = getPositions();
+                double dis = pos[i+1] - pos[i];
+                System.out.println(dis);
+                sprites.get(i + 1).btmRowMove(dis);
+            }
             scrollVal += 1;
         });
 
@@ -276,7 +292,7 @@ public class Menu {
             spawnSprites(spritePane, spriteHome, leftScroll);
         });
 
-         spritePane.getChildren().add(sprites.get(scrollVal));
+        spritePane.getChildren().add(sprites.get(scrollVal));
 
         gridPane.add(leftScroll, 0, 2);
         gridPane.add(spritePane, 1, 2);
@@ -497,4 +513,11 @@ public class Menu {
     }
 
     public int getScrollVal(){return scrollVal;}
+    public ArrayList<MenuAnimal> getMenuAnimals(){
+        return sprites;
+    }
+
+    public double[] getPositions() {
+        return positions;
+    }
 }
