@@ -7,6 +7,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
+import java.security.Principal;
 import java.util.ArrayList;
 
 public class MenuAnimal extends Actor{
@@ -118,28 +119,55 @@ public class MenuAnimal extends Actor{
     public void btmRowMove(double distance){
         System.out.println(STR."\nbtmRowMove of \{getNo()}, distance = \{distance}");
         double hopDistance = distance/2;
+        double target = (getBoundsInParent().getMinX() + distance);
+        boolean quickImg;
+        if (getImage() != right) {
 
-        Duration hopDuration = Duration.millis(200);
+            quickImg = true;
+        }
+        else{
+            quickImg = false;
+        }
+
+
+        Duration hopDuration = Duration.millis(500);
 
         Timeline timeline = new Timeline();
         timeline.setCycleCount(Animation.INDEFINITE);
 
         KeyFrame keyFrame = new KeyFrame(hopDuration, e -> {
             double currentX = getBoundsInParent().getMinX();
-            if (distance > 0){
-                move(hopDistance, 0);
-                rightTurn();
-                move(hopDistance, 0);
-                faceUp();
-
-            } else {
-                move(hopDistance, 0);
-                leftTurn();
-                move(hopDistance, 0);
-                faceUp();
-
+            if (currentX + hopDistance > target){
+                System.out.println("hit timeline stop");
+                timeline.stop();
             }
+            else{
+                if (getImage() != right){
+                    rightTurn();
+                }
+                move(hopDistance, 0);
+                if (currentX == target){
+                    faceUp();
+                    System.out.println("just told them man face up");
+
+                }
+            }
+
+//            if (distance > 0){
+//
+//                rightTurn();
+//                move(hopDistance, 0);
+//                faceUp();
+//
+//            } else {
+//                move(hopDistance, 0);
+//                leftTurn();
+//                move(hopDistance, 0);
+//                faceUp();
+//
+//            }
             System.out.println(currentX);
+            System.out.println(STR."currentX = \{currentX} getImage() != right = \{quickImg}");
             timeline.stop();
         });
 
