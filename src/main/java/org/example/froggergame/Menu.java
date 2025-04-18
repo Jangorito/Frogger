@@ -272,32 +272,33 @@ public class Menu {
         //   - would eliminate need for a direct call to leftAnimation and instead trigger a funcion that repositions
         //   ALL sprites to reposition, also meaning it works off the rip and don't have to hardcode initial positions
         rightScroll.setOnAction(event -> {
-            System.out.println(STR."\n\n-------------------\nright has been clicked with a scrollVal of: \{scrollVal}");
+            System.out.println(STR."\n\n-----------------------------------------------\nright has been clicked with a scrollVal of: \{scrollVal}");
 
             int count = 2;
 
-            for (int i = 0; i < (noCharacters-1); i++){
+            for (int i = 0; i < (noCharacters); i++){
 
                 MenuAnimal curSprite = sprites.get(i);
-                System.out.println(STR."^------loop------^\nCurSprite no: \{curSprite.getNo()} \ni: \{i} \nscrollVal: \{scrollVal}");
+                System.out.println(STR."CurSprite no: \{curSprite.getNo()} \ni: \{i}");
 
                 double[] pos = getPositions();
                 if (i == scrollVal){
                     curSprite.rightAnimation(spritePane);
-                    System.out.println(STR."rightAnimating sprite: \{curSprite.getNo()}");
+//                    System.out.println(STR."rightAnimating sprite: \{curSprite.getNo()}");
+                    //TODO: doesn't face up but the fix prolly ain't here
                 } else if (i == next(scrollVal)) {
-                    System.out.println(STR."alt moving sprite: \{curSprite.getNo()}");
+//                    System.out.println(STR."alt moving sprite: \{curSprite.getNo()}");
                 } else{
                     double dis = pos[count] - pos[count+1];
+                    System.out.println(STR."\nmoving sprite \{curSprite.getNo()} using: [pos[count] - pos[count + 1]] which is \{pos[count]} - \{pos[count + 1]} = \{dis}");
                     System.out.println(Arrays.toString(pos));
-                    System.out.println(STR."moving sprite \{curSprite.getNo()} using: [pos[count] - pos[count + 1]] which is \{pos[count]} - \{pos[count + 1]} = \{dis}");
                     curSprite.btmRowMove(dis);
                     count -= 1;
                 }
-                System.out.println("+------loop------+\n\n");
+//                System.out.println("+------loop------+\n\n");
             }
             scrollVal = next(scrollVal);
-            System.out.println(STR."scrollVal after moves: \{scrollVal}");
+            System.out.println(STR."_________________________________\n\nscrollVal after moves: \{scrollVal}");
 
         });
 
@@ -308,7 +309,7 @@ public class Menu {
             // sprites.get(scrollVal).rightAnimation(spritePane);
             int count = 0;
 
-            for (int i = 0; i < (noCharacters-1); i++){
+            for (int i = 0; i < (noCharacters); i++){
 
                 MenuAnimal curSprite = sprites.get(i);
                 System.out.println(STR."^------loop------^\nCurSprite no: \{curSprite.getNo()} \ni: \{i} \nscrollVal: \{scrollVal}");
@@ -348,10 +349,10 @@ public class Menu {
 
 //        spawnSprites(spritePane, spriteHome, leftScroll);
         Platform.runLater(() -> {
-            System.out.println("runLater vals:");
-            System.out.println(leftScroll.getHeight());
-            System.out.println(QuickSetUp.getWidth());
-            System.out.println(sprites.getFirst().getHeight());
+//            System.out.println("runLater vals:");
+//            System.out.println(leftScroll.getHeight());
+//            System.out.println(QuickSetUp.getWidth());
+//            System.out.println(sprites.getFirst().getHeight());
             spawnSprites(spritePane, spriteHome, leftScroll);
         });
 

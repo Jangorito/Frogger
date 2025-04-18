@@ -127,7 +127,7 @@ public class MenuAnimal extends Actor{
 
         double hopDistance = distance/2;
         double target = (getBoundsInParent().getMinX() + distance);
-        System.out.println(STR."\n^---------------^\nbtmRowMove()'ing sprite \{getNo()}, distance = \{distance}, target = \{target}");
+        System.out.println(STR."\nbtmRowMove()'ing sprite \{getNo()}, distance = \{distance}, target = \{target}");
         boolean quickImg;
         if (distance > 0){
 
@@ -171,40 +171,11 @@ public class MenuAnimal extends Actor{
                     System.out.println("just told them man face up");
                 }
             }
-//            if (distance > 0){
-//
-//                rightTurn();
-//                move(hopDistance, 0);
-//                faceUp();
-//
-//            } else {
-//                move(hopDistance, 0);
-//                leftTurn();
-//                move(hopDistance, 0);
-//                faceUp();
-//
-//            }
-            // System.out.println(STR."currentX = \{currentX} getImage() != right = \{quickImg}");
-//            timeline.stop();
         });
 
-        System.out.println("^---------------^\n");
+//        System.out.println("^---------------^\n");
         timeline.getKeyFrames().add(keyFrame);
         timeline.play();
-
-    }
-    // TODO:
-    //  - call right & left animations from this?
-    //  +
-    //  - each arrow triggers the animals in the lower pane to:
-    //      - turn the opposite way
-    //      - move down along and pane
-    //      - have the one on the end of the way their facing travel up to the upper pane
-    //      - turn back to face upwards
-    //      - the animal in the upper pane should also join the empty gap left and one of the
-    public void positions(Menu menu, Integer direction){
-
-        int spriteNo = menu.getScrollVal();
 
     }
 
