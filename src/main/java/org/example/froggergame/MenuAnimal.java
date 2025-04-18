@@ -116,17 +116,35 @@ public class MenuAnimal extends Actor{
         setImage(up);
     }
 
+    private boolean checkStop(double cur, double hop, double target) {
+        System.out.println(STR."hit checkStop() with cur=\{cur}, hop=\{hop}, target=\{target}");
+        if (hop > 0) {
+            return  (cur + hop > target);
+        } else return cur + hop < target;
+        //TODO: left button still works using this function so check the maths of this logic here^
+    }
     public void btmRowMove(double distance){
 
         double hopDistance = distance/2;
         double target = (getBoundsInParent().getMinX() + distance);
-        System.out.println(STR."\nbtmRowMove()'ing sprite \{getNo()}, distance = \{distance}, target = \{target}");
+        System.out.println(STR."\n^---------------^\nbtmRowMove()'ing sprite \{getNo()}, distance = \{distance}, target = \{target}");
         boolean quickImg;
-        if (getImage() != right) {
-            quickImg = true;
-        }
-        else{
-            quickImg = false;
+        if (distance > 0){
+
+            if (getImage() != right) {
+                quickImg = true;
+            }
+            else{
+                quickImg = false;
+            }
+        } else{
+            if (getImage() != left) {
+                quickImg = true;
+            }
+            else{
+                quickImg = false;
+            }
+
         }
 
         Duration hopDuration = Duration.millis(500);
@@ -136,7 +154,7 @@ public class MenuAnimal extends Actor{
 
         KeyFrame keyFrame = new KeyFrame(hopDuration, e -> {
             double currentX = getBoundsInParent().getMinX();
-            if (currentX + hopDistance > target){
+            if (checkStop(currentX, hopDistance, target)){
                 faceUp();
                 System.out.println("hit timeline stop");
                 timeline.stop();
@@ -166,11 +184,11 @@ public class MenuAnimal extends Actor{
 //                faceUp();
 //
 //            }
-            System.out.println(currentX);
-            System.out.println(STR."currentX = \{currentX} getImage() != right = \{quickImg}");
+            // System.out.println(STR."currentX = \{currentX} getImage() != right = \{quickImg}");
 //            timeline.stop();
         });
 
+        System.out.println("^---------------^\n");
         timeline.getKeyFrames().add(keyFrame);
         timeline.play();
 

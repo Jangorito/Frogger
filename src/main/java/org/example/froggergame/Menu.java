@@ -272,12 +272,36 @@ public class Menu {
         //   - would eliminate need for a direct call to leftAnimation and instead trigger a funcion that repositions
         //   ALL sprites to reposition, also meaning it works off the rip and don't have to hardcode initial positions
         rightScroll.setOnAction(event -> {
-            sprites.get(scrollVal).rightAnimation(spritePane);
-            scrollVal = prev(scrollVal);
+            System.out.println(STR."\n\n-------------------\nright has been clicked with a scrollVal of: \{scrollVal}");
+
+            int count = 2;
+
+            for (int i = 0; i < (noCharacters-1); i++){
+
+                MenuAnimal curSprite = sprites.get(i);
+                System.out.println(STR."^------loop------^\nCurSprite no: \{curSprite.getNo()} \ni: \{i} \nscrollVal: \{scrollVal}");
+
+                double[] pos = getPositions();
+                if (i == scrollVal){
+                    curSprite.rightAnimation(spritePane);
+                    System.out.println(STR."rightAnimating sprite: \{curSprite.getNo()}");
+                } else if (i == next(scrollVal)) {
+                    System.out.println(STR."alt moving sprite: \{curSprite.getNo()}");
+                } else{
+                    double dis = pos[count] - pos[count+1];
+                    System.out.println(Arrays.toString(pos));
+                    System.out.println(STR."moving sprite \{curSprite.getNo()} using: [pos[count] - pos[count + 1]] which is \{pos[count]} - \{pos[count + 1]} = \{dis}");
+                    curSprite.btmRowMove(dis);
+                    count -= 1;
+                }
+                System.out.println("+------loop------+\n\n");
+            }
+            scrollVal = next(scrollVal);
+            System.out.println(STR."scrollVal after moves: \{scrollVal}");
 
         });
+
         leftScroll.setOnAction(event -> {
-            if (scrollVal.equals(noCharacters)){scrollVal = 0;} // reset scroll count
             System.out.println(STR."\n\n-------------------\nleft has been clicked with a scrollVal of: \{scrollVal}");
 
             System.out.println(STR."the loop login should be: from \{scrollVal} --> \{prev((scrollVal))}. Step: \{next(0)}\n___________________\n\n");
@@ -304,14 +328,6 @@ public class Menu {
                 }
                 System.out.println("+------loop------+\n\n");
             }
-            // if scroll val continue, if scrollVal(prev) continue
-//            for (int i = 0; i < noCharacters - 2; i++){
-//                System.out.println(sprites.get(i + 1).getNo());
-//                double[] pos = getPositions();
-//                double dis = pos[i+1] - pos[i];
-//                System.out.println(dis);
-//                sprites.get(i + 1).btmRowMove(dis);
-//            }
             scrollVal = next(scrollVal);
             System.out.println(STR."scrollVal after moves: \{scrollVal}");
 
