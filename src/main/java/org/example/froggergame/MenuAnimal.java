@@ -66,7 +66,7 @@ public class MenuAnimal extends Actor{
             //  EXTENSION: maybe make a little house for each frogger that works with current animation
             //  ALSO: we need to hop on pc and make different sprite images
             if (currentX - hopDistance <= minX) {
-                setLayoutX(minX); // snap to start
+                // setLayoutX(minX); // snap to start
                 // parentPane.getChildren().remove(this); // kill object
                 timeline.stop();
             } else {
@@ -117,18 +117,17 @@ public class MenuAnimal extends Actor{
     }
 
     public void btmRowMove(double distance){
-        System.out.println(STR."\nbtmRowMove of \{getNo()}, distance = \{distance}");
+
         double hopDistance = distance/2;
         double target = (getBoundsInParent().getMinX() + distance);
+        System.out.println(STR."\nbtmRowMove()'ing sprite \{getNo()}, distance = \{distance}, target = \{target}");
         boolean quickImg;
         if (getImage() != right) {
-
             quickImg = true;
         }
         else{
             quickImg = false;
         }
-
 
         Duration hopDuration = Duration.millis(500);
 
@@ -138,21 +137,22 @@ public class MenuAnimal extends Actor{
         KeyFrame keyFrame = new KeyFrame(hopDuration, e -> {
             double currentX = getBoundsInParent().getMinX();
             if (currentX + hopDistance > target){
+                faceUp();
                 System.out.println("hit timeline stop");
                 timeline.stop();
             }
             else{
-                if (getImage() != right){
+                if (quickImg){
                     rightTurn();
+                    System.out.println("rightTurn()");
                 }
                 move(hopDistance, 0);
+                System.out.println("move()");
                 if (currentX == target){
                     faceUp();
                     System.out.println("just told them man face up");
-
                 }
             }
-
 //            if (distance > 0){
 //
 //                rightTurn();
@@ -168,7 +168,7 @@ public class MenuAnimal extends Actor{
 //            }
             System.out.println(currentX);
             System.out.println(STR."currentX = \{currentX} getImage() != right = \{quickImg}");
-            timeline.stop();
+//            timeline.stop();
         });
 
         timeline.getKeyFrames().add(keyFrame);

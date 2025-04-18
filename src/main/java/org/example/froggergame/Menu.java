@@ -42,6 +42,7 @@ public class Menu {
     boolean init;
     // MenuAnimal sprites[scrollVal];
     public ArrayList<MenuAnimal> sprites;
+
     Integer scrollVal; // integer holding which sprite is selected based on button clicks
     Integer noCharacters; // dynamic number of available Frogger Skins
     double[] positions;
@@ -149,6 +150,28 @@ public class Menu {
         }
     }
 
+    private int next(int num) {
+        if (num < 4) {
+            num += 1;
+        } else {
+            num = 0;
+        }
+        return num;
+    }
+
+    private int prev(int num) {
+        if (num == 0) {
+            num = 4;
+        } else {
+            num =- 1;
+        }
+        return num;
+    }
+
+//    private void leftShift(){
+//        dy
+//    }
+
     private void spawnSprites(Pane arrowsPane, Pane spriteHome, Button leftScroll) {
         double paneWidth = spriteHome.getPrefWidth();
         double paneHeight = spriteHome.getPrefHeight();
@@ -195,8 +218,6 @@ public class Menu {
         }
         System.out.println(Arrays.toString(positions));
     }
-
-
 
     /**
      * Displays the main menu with options for quick setup and advanced setup.
@@ -250,24 +271,50 @@ public class Menu {
         //   - gridPane is controlled from here, what does that mean?
         //   - would eliminate need for a direct call to leftAnimation and instead trigger a funcion that repositions
         //   ALL sprites to reposition, also meaning it works off the rip and don't have to hardcode initial positions
-        leftScroll.setOnAction(event -> {
-            if (scrollVal < 0){ scrollVal = noCharacters - 1;} // reset scroll count
-            sprites.get(scrollVal).leftAnimation(spritePane);
-            scrollVal -= 1;
+        rightScroll.setOnAction(event -> {
+            sprites.get(scrollVal).rightAnimation(spritePane);
+            scrollVal = prev(scrollVal);
 
         });
-        rightScroll.setOnAction(event -> {
+        leftScroll.setOnAction(event -> {
             if (scrollVal.equals(noCharacters)){scrollVal = 0;} // reset scroll count
+            System.out.println(STR."\n\n-------------------\nleft has been clicked with a scrollVal of: \{scrollVal}");
 
-            sprites.get(scrollVal).rightAnimation(spritePane);
-            for (int i = 0; i < noCharacters - 2; i++){
-                System.out.println(sprites.get(i + 1).getNo());
+            System.out.println(STR."the loop login should be: from \{scrollVal} --> \{prev((scrollVal))}. Step: \{next(0)}\n___________________\n\n");
+            // sprites.get(scrollVal).rightAnimation(spritePane);
+            int count = 0;
+
+            for (int i = 0; i < (noCharacters-1); i++){
+
+                MenuAnimal curSprite = sprites.get(i);
+                System.out.println(STR."^------loop------^\nCurSprite no: \{curSprite.getNo()} \ni: \{i} \nscrollVal: \{scrollVal}");
+
                 double[] pos = getPositions();
-                double dis = pos[i+1] - pos[i];
-                System.out.println(dis);
-                sprites.get(i + 1).btmRowMove(dis);
+                if (i == scrollVal){
+                    curSprite.leftAnimation(spritePane);
+                    System.out.println(STR."leftAnimating sprite: \{curSprite.getNo()}");
+                } else if (i == prev(scrollVal)) {
+                    System.out.println(STR."alt moving sprite: \{curSprite.getNo()}");
+                } else{
+                    double dis = pos[count + 1] - pos[count];
+                    System.out.println(Arrays.toString(pos));
+                    System.out.println(STR."moving sprite \{curSprite.getNo()} using: [pos[count + 1] - pos[count]] which is \{pos[count + 1]} - \{pos[count]} = \{dis}");
+                    curSprite.btmRowMove(dis);
+                    count += 1;
+                }
+                System.out.println("+------loop------+\n\n");
             }
-            scrollVal += 1;
+            // if scroll val continue, if scrollVal(prev) continue
+//            for (int i = 0; i < noCharacters - 2; i++){
+//                System.out.println(sprites.get(i + 1).getNo());
+//                double[] pos = getPositions();
+//                double dis = pos[i+1] - pos[i];
+//                System.out.println(dis);
+//                sprites.get(i + 1).btmRowMove(dis);
+//            }
+            scrollVal = next(scrollVal);
+            System.out.println(STR."scrollVal after moves: \{scrollVal}");
+
         });
 
 //        // matching the height and width of the animal sprite to the arrows
