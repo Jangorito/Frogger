@@ -68,6 +68,7 @@ public class MenuAnimal extends Actor{
             if (currentX - hopDistance <= minX) {
                 // setLayoutX(minX); // snap to start
                 // parentPane.getChildren().remove(this); // kill object
+                setX(0);
                 timeline.stop();
             } else {
                 move(-hopDistance, 0);
@@ -90,10 +91,12 @@ public class MenuAnimal extends Actor{
 
         KeyFrame keyFrame = new KeyFrame(hopDuration, e -> {
             double currentX = getBoundsInParent().getMinX();
-            System.out.print(currentX);
+            System.out.println(currentX);
             if (currentX + hopDistance >= maxX) {
                 // setLayoutX(maxX); // snap to end
                 // parentPane.getChildren().remove(this); // kill object
+                setX(130);
+                System.out.println(STR."current X after being hard coded:\{currentX}");
                 timeline.stop();
             } else {
                 move(hopDistance, 0);
@@ -117,7 +120,7 @@ public class MenuAnimal extends Actor{
     }
 
     private boolean checkStop(double cur, double hop, double target) {
-        System.out.println(STR."hit checkStop() with cur=\{cur}, hop=\{hop}, target=\{target}");
+//        System.out.println(STR."hit checkStop() with cur=\{cur}, hop=\{hop}, target=\{target}");
         if (hop > 0) {
             return  (cur + hop > target);
         } else return cur + hop < target;
@@ -128,23 +131,19 @@ public class MenuAnimal extends Actor{
         double hopDistance = distance/2;
         double target = (getBoundsInParent().getMinX() + distance);
         System.out.println(STR."\nbtmRowMove()'ing sprite \{getNo()}, distance = \{distance}, target = \{target}");
-        boolean quickImg;
-        if (distance > 0){
 
+        //TODO: fix so that the sprites turn left when right is clicked
+
+        if (distance > 0) {
             if (getImage() != right) {
-                quickImg = true;
+                rightTurn();
+                // System.out.println("rightTurn()");
             }
-            else{
-                quickImg = false;
-            }
-        } else{
+        } else if (distance < 0) {
             if (getImage() != left) {
-                quickImg = true;
+                leftTurn();
+                // System.out.println("leftTurn()");
             }
-            else{
-                quickImg = false;
-            }
-
         }
 
         Duration hopDuration = Duration.millis(500);
@@ -154,26 +153,16 @@ public class MenuAnimal extends Actor{
 
         KeyFrame keyFrame = new KeyFrame(hopDuration, e -> {
             double currentX = getBoundsInParent().getMinX();
-            if (checkStop(currentX, hopDistance, target)){
+            if (checkStop(currentX, hopDistance, target)) {
                 faceUp();
-                System.out.println("hit timeline stop");
+                // System.out.println("hit timeline stop");
                 timeline.stop();
-            }
-            else{
-                if (quickImg){
-                    rightTurn();
-                    System.out.println("rightTurn()");
-                }
+            } else {
                 move(hopDistance, 0);
-                System.out.println("move()");
-                if (currentX == target){
-                    faceUp();
-                    System.out.println("just told them man face up");
-                }
+                // System.out.println("move()");
             }
         });
 
-//        System.out.println("^---------------^\n");
         timeline.getKeyFrames().add(keyFrame);
         timeline.play();
 
